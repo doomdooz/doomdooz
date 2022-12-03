@@ -1,4 +1,5 @@
 // use lib_ruby_parser::parser::SymbolKind;
+use crate::reporting::add_offense;
 use lib_ruby_parser::Bytes;
 use lib_ruby_parser::{ParserResult, Token};
 use regex::Regex;
@@ -36,7 +37,7 @@ fn first_offense_range(token: &Token) -> Range<usize> {
     })
 }
 
-fn add_offense(range: Range<usize>, message: &'static str) {
-    dbg!(range);
-    dbg!(message);
-}
+// fn add_offense(range: Range<usize>, message: &'static str) {
+//     dbg!(range);
+//     dbg!(message);
+// }
