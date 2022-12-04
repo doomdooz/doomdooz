@@ -1,27 +1,28 @@
-use lib_ruby_parser::{Parser, ParserOptions};
+use std::env;
 use std::sync::Mutex;
 
 #[macro_use]
 extern crate lazy_static;
-// use lazy_static;
 
 mod cop;
 mod reporting;
+mod source;
 
 lazy_static! {
-    static ref OFFENSES: Mutex<Vec<String>> = Mutex::new(vec![String::from("nothing")]);
+    static ref OFFENSES: Mutex<Vec<String>> = Mutex::new(vec![]);
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let options = ParserOptions {
-        buffer_name: "(eval)".to_string(),
-        ..Default::default()
-    };
-    let parser = Parser::new(String::from("      foo∂∂bar = baz"), options);
+    let args: Vec<String> = env::args().skip(1).collect();
 
-    let result = parser.do_parse();
+    if args.len() != 1 {
+        println!("pass a file");
+        return Ok(());
+    }
 
-    cop::naming::ascii_identifiers(result);
+    for filepath in args {
+        source::File::new(filepath).parse();
+    }
 
     reporting::print_report();
 

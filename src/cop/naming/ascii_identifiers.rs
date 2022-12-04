@@ -7,13 +7,22 @@ use std::ops::Range;
 
 static IDENTIFIER_MSG: &str = "Use only ascii symbols in identifiers.";
 static CONSTANT_MSG: &str = "Use only ascii symbols in constants.";
+static COP_NAME: &str = "Naming/AsciiIdentifiers";
 
 pub fn ascii_identifiers(result: ParserResult) {
-    for token in result.tokens {
+    for token in &result.tokens {
         if should_scheck(&token) && !is_ascci(&token.token_value) {
-            println!("{:#?}", token);
             let offense = first_offense_range(&token);
             add_offense(offense, IDENTIFIER_MSG);
+
+            // let a = &result.input.line_col_for_pos(token.loc.begin);
+            // let a = &result.input.line_col_for_pos(token.loc.begin);
+            // let bytes = input.substr_at(token.loc.begin_line_col(), token.loc.end_line_col())?;
+            // dbg!(String::from_utf8_lossy(bytes).into_owned());
+
+            // dbg!(token.loc.source(&result.input));
+            // dbg!(&result.input);
+            // dbg!(token);
         }
     }
 }
@@ -31,13 +40,8 @@ fn first_offense_range(token: &Token) -> Range<usize> {
     let binding = token.token_value.to_string().unwrap();
     let mat = re.find(&binding).unwrap();
 
-    dbg!(Range {
+    Range {
         start: token.loc.begin + mat.start(),
         end: token.loc.begin + mat.end(),
-    })
+    }
 }
-
-// fn add_offense(range: Range<usize>, message: &'static str) {
-//     dbg!(range);
-//     dbg!(message);
-// }
