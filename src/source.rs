@@ -22,6 +22,6 @@ impl File {
 
         let result = parser.do_parse();
 
-        cop::naming::ascii_identifiers(result);
+        cop::naming::ascii_identifiers::run(result);
     }
 }

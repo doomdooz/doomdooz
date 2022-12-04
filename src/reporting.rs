@@ -6,6 +6,10 @@ pub fn add_offense(range: Range<usize>, message: &'static str) {
     OFFENSES.lock().unwrap().push(msg);
 }
 
+pub fn total() -> usize {
+    OFFENSES.lock().unwrap().len()
+}
+
 pub fn print_report() {
     OFFENSES
         .lock()

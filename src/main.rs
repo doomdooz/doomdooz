@@ -7,6 +7,7 @@ extern crate lazy_static;
 mod cop;
 mod reporting;
 mod source;
+mod testing;
 
 lazy_static! {
     static ref OFFENSES: Mutex<Vec<String>> = Mutex::new(vec![]);

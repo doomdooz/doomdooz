@@ -9,7 +9,7 @@ static IDENTIFIER_MSG: &str = "Use only ascii symbols in identifiers.";
 static CONSTANT_MSG: &str = "Use only ascii symbols in constants.";
 static COP_NAME: &str = "Naming/AsciiIdentifiers";
 
-pub fn ascii_identifiers(result: ParserResult) {
+pub fn run(result: ParserResult) {
     for token in &result.tokens {
         if should_scheck(&token) && !is_ascci(&token.token_value) {
             let offense = first_offense_range(&token);
@@ -43,5 +43,19 @@ fn first_offense_range(token: &Token) -> Range<usize> {
     Range {
         start: token.loc.begin + mat.start(),
         end: token.loc.begin + mat.end(),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::reporting;
+    use crate::testing;
+
+    #[test]
+    fn it_works() {
+        testing::execute("name= 'aa'".to_string(), run);
+
+        assert_eq!(reporting::total(), 0);
     }
 }
