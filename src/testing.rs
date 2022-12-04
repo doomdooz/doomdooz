@@ -1,6 +1,6 @@
 use lib_ruby_parser::{Parser, ParserOptions, ParserResult};
 
-pub fn execute(source: String, cop_func: fn(ParserResult)) {
+pub fn execute(source: &str, cop_func: fn(ParserResult)) {
     let options = ParserOptions {
         ..Default::default()
     };

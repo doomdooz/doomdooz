@@ -53,9 +53,16 @@ mod tests {
     use crate::testing;
 
     #[test]
-    fn it_works() {
-        testing::execute("name= 'aa'".to_string(), run);
+    fn ascii_variable_identifier() {
+        testing::execute("name= 'aa'", run);
 
         assert_eq!(reporting::total(), 0);
+    }
+
+    #[test]
+    fn non_ascii_variable_identifier() {
+        testing::execute("foo∂∂bar = 'aa'", run);
+
+        assert_eq!(reporting::total(), 1);
     }
 }
