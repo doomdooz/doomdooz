@@ -1,6 +1,7 @@
 use crate::cop;
 use crate::NODE_HANDLERS;
 use crate::OFFENSES;
+use lib_ruby_parser::source::DecodedInput;
 use lib_ruby_parser::Node;
 use lib_ruby_parser::{Parser, ParserOptions, ParserResult};
 use std::fs;
@@ -23,26 +24,25 @@ impl File {
 
         let parser = Parser::new(source, options);
 
-        let result = parser.do_parse();
+        let ParserResult { ast, input, .. } = parser.do_parse();
 
-        iterate_nodes(&(*result.ast.unwrap()));
+        iterate_nodes(&(*ast.unwrap()), &input);
     }
 }
 
-fn iterate_nodes(node: &Node) {
-    // run_node(node.str_type)
+fn iterate_nodes(node: &Node, input: &DecodedInput) {
     let node_type = node.str_type();
 
     if let Some(handlers) = NODE_HANDLERS.lock().unwrap().get(node_type) {
         for handler in handlers {
-            handler(node, &*OFFENSES);
+            handler(node, &*OFFENSES, input);
         }
     }
 
     match node {
         Node::Begin(n) => {
             for statement in &n.statements {
-                iterate_nodes(&statement);
+                iterate_nodes(&statement, input);
             }
         }
         _ => (),
