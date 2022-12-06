@@ -35,7 +35,7 @@ pub fn on_def(node: &Node, offenses: types::OffenseList) {
     if let Node::Def(node) = node {
         if node.name.starts_with("get_") {
             if None == node.args {
-                reporting::add_offense(node.name_l.begin..node.name_l.end, MSG_READER);
+                reporting::add_offense(offenses, node.name_l.begin..node.name_l.end, MSG_READER);
             }
         }
     }
@@ -46,17 +46,20 @@ mod tests {
     use super::*;
     use crate::reporting;
     use crate::testing;
+    use crate::types;
+    use std::sync::Mutex;
 
     #[test]
-    fn it_works() {
+    fn it_detects_get_attribute() {
         let code = "
             def get_attribute
             end
         ";
 
-        on_def(testing::parse(code).ast.unwrap());
-        // testing::execute(code, run);
+        let offenses: types::OffenseList = &Mutex::new(vec![]);
 
-        // assert_eq!(reporting::total(), 1);
+        on_def(&testing::ast(code), &offenses);
+
+        assert_eq!(reporting::total(offenses), 1);
     }
 }

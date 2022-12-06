@@ -1,13 +1,14 @@
+use crate::types;
 use crate::OFFENSES;
 use std::ops::Range;
 
-pub fn add_offense(range: Range<usize>, message: &'static str) {
+pub fn add_offense(offenses: types::OffenseList, range: Range<usize>, message: &'static str) {
     let msg = format!("{}:{} {}", range.start, range.end, message.to_string());
-    OFFENSES.lock().unwrap().push(msg);
+    offenses.lock().unwrap().push(msg);
 }
 
-pub fn total() -> usize {
-    OFFENSES.lock().unwrap().len()
+pub fn total(offenses: types::OffenseList) -> usize {
+    offenses.lock().unwrap().len()
 }
 
 pub fn print_report() {

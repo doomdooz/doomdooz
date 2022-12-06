@@ -13,7 +13,7 @@ pub fn run(result: ParserResult) {
     for token in &result.tokens {
         if should_scheck(&token) && !is_ascci(&token.token_value) {
             let offense = first_offense_range(&token);
-            add_offense(offense, IDENTIFIER_MSG);
+            add_offense(&crate::OFFENSES, offense, IDENTIFIER_MSG);
         }
     }
 }
@@ -47,7 +47,7 @@ mod tests {
     fn ascii_variable_identifier() {
         testing::execute("name= 'aa'", run);
 
-        assert_eq!(reporting::total(), 0);
+        assert_eq!(reporting::total(&crate::OFFENSES), 0);
     }
 
     #[test]
