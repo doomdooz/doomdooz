@@ -35,27 +35,16 @@ fn iterate_nodes(node: &Node) {
 
     if let Some(handlers) = NODE_HANDLERS.lock().unwrap().get(node_type) {
         for handler in handlers {
-            // dbg!(crate::OFFENSES);
             handler(node, &*OFFENSES);
         }
     }
 
-    dbg!(node.str_type());
-
-    // self
-    // match node {
-    //     Node::Def(n) => self.run_node(n),
-    //     Node::Begin(n) => {
-    //         for statement in n.statements {
-    //             iterate_nodes(statement);
-    //         }
-    //     }
-    //     _ => println!("not found"),
-    // }
+    match node {
+        Node::Begin(n) => {
+            for statement in &n.statements {
+                iterate_nodes(&statement);
+            }
+        }
+        _ => (),
+    }
 }
-
-// fn run_node(self, node_name: &'static str) {
-//     // for (node_name, handler) in NODE_HANDLERS.lock().unwrap().iter() {
-//     //     dbg!(node_name);
-//     // }
-// }
