@@ -27,11 +27,6 @@ pub fn on_def(node: &Node, file: &source::File) {
                 if let Node::Args(args) = &**args {
                     if args.args.len() == 1 {
                         file.add_offense(COP_NAME, node.name_l.begin..node.name_l.end, MSG_WRITER);
-                        // reporting::add_offense(
-                        //     &offenses,
-                        //     node.name_l.begin..node.name_l.end,
-                        //     MSG_WRITER,
-                        // );
                     }
                 }
             }
@@ -41,37 +36,37 @@ pub fn on_def(node: &Node, file: &source::File) {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::reporting;
-    use crate::testing;
-    use crate::types;
-    use std::sync::Mutex;
+    use crate::testing::*;
 
     #[test]
     fn it_detects_get_attribute() {
-        let code = "
+        super::init();
+
+        expect_offense(
+            "
             def get_attribute
             end
-        ";
-
-        let offenses: types::OffenseList = &Mutex::new(vec![]);
-
-        on_def(&testing::ast(code), &offenses);
-
-        assert_eq!(reporting::total(offenses), 1);
+        ",
+        );
     }
 
     #[test]
     fn it_detects_set_attribute() {
-        let code = "
+        expect_offense(
+            "
             def set_attribute(aa)
             end
-        ";
+        ",
+        );
+    }
 
-        let offenses: types::OffenseList = &Mutex::new(vec![]);
-
-        on_def(&testing::ast(code), &offenses);
-
-        assert_eq!(reporting::total(offenses), 1);
+    #[test]
+    fn it_works_fine_with_other_method_names() {
+        expect_no_offense(
+            "
+            def set_name
+            end
+        ",
+        );
     }
 }

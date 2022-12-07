@@ -17,6 +17,22 @@ pub struct File {
 }
 
 impl<'a> File {
+    pub fn inline(source: &'static str) -> File {
+        let options = ParserOptions {
+            ..Default::default()
+        };
+
+        let parser = Parser::new(source, options);
+
+        let parser_result = parser.do_parse();
+
+        File {
+            filepath: "".to_string(),
+            parser_result: parser_result,
+            offenses: Mutex::new(vec![]),
+        }
+    }
+
     pub fn new(filepath: String) -> File {
         let options = ParserOptions {
             ..Default::default()

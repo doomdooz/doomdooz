@@ -31,3 +31,17 @@ pub fn execute(source: &str, cop_func: fn(ParserResult)) {
 
     cop_func(result);
 }
+
+pub fn expect_no_offense(source: &'static str) {
+    let file = crate::source::File::inline(source);
+    file.process();
+
+    assert_eq!(file.total_offenses(), 0);
+}
+
+pub fn expect_offense(source: &'static str) {
+    let file = crate::source::File::inline(source);
+    file.process();
+
+    assert_eq!(file.total_offenses(), 1);
+}
