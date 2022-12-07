@@ -1,5 +1,5 @@
 use crate::cop::register_node_handler;
-use crate::reporting;
+use crate::source;
 use crate::types;
 use lib_ruby_parser::nodes;
 use lib_ruby_parser::source::DecodedInput;
@@ -16,27 +16,22 @@ pub fn init() {
     register_node_handler("def", on_def);
 }
 
-pub fn on_def(node: &Node, offenses: types::OffenseList, input: &DecodedInput) {
+pub fn on_def(node: &Node, file: &source::File) {
     if let Node::Def(node) = node {
         if node.name.starts_with("get_") {
             if None == node.args {
-                // dbg!(node.name_l.begin_line_col());
-                let (line, col) = input.line_col_for_pos(node.name_l.begin).unwrap();
-
-                let st = format!("{}:{}:{}: ", "filename", line + 1, col + 1);
-                dbg!(st);
-
-                reporting::add_offense(offenses, node.name_l.begin..node.name_l.end, MSG_READER);
+                file.add_offense(COP_NAME, node.name_l.begin..node.name_l.end, MSG_READER);
             }
         } else if node.name.starts_with("set_") {
             if let Some(args) = &node.args {
                 if let Node::Args(args) = &**args {
                     if args.args.len() == 1 {
-                        reporting::add_offense(
-                            offenses,
-                            node.name_l.begin..node.name_l.end,
-                            MSG_WRITER,
-                        );
+                        file.add_offense(COP_NAME, node.name_l.begin..node.name_l.end, MSG_WRITER);
+                        // reporting::add_offense(
+                        //     &offenses,
+                        //     node.name_l.begin..node.name_l.end,
+                        //     MSG_WRITER,
+                        // );
                     }
                 }
             }

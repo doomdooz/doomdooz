@@ -8,7 +8,6 @@ use std::sync::Mutex;
 extern crate lazy_static;
 
 mod cop;
-mod reporting;
 mod source;
 mod testing;
 mod types;
@@ -29,10 +28,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     for filepath in args {
-        source::File::new(filepath).parse();
+        let file = source::File::new(filepath);
+        file.process();
+        file.print_report();
     }
-
-    reporting::print_report();
 
     Ok(())
 }
