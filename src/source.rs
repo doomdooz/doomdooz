@@ -13,7 +13,7 @@ use std::sync::Mutex;
 pub struct File {
     filepath: String,
     offenses: types::OffenseList,
-    parser_result: ParserResult,
+    pub parser_result: ParserResult,
 }
 
 impl<'a> File {

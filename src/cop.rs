@@ -1,4 +1,5 @@
 pub mod naming;
+pub mod style;
 
 use crate::types;
 use crate::NODE_HANDLERS;
@@ -8,6 +9,7 @@ use std::sync::Mutex;
 
 pub fn init() {
     naming::init();
+    style::init();
 }
 
 pub fn register_node_handler(node_name: &'static str, handler: types::NodeHandler) {
