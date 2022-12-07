@@ -18,6 +18,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8e72b4bf1c2b13430eeaf9f1c60d08e1e8fbaff5fd52ce53711e773131a997ff"
 
 [[package]]
+name = "doomdooz"
+version = "0.1.0"
+dependencies = [
+ "lazy_static",
+ "lib-ruby-parser",
+ "regex",
+]
+
+[[package]]
 name = "lazy_static"
 version = "1.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -54,12 +63,3 @@ name = "regex-syntax"
 version = "0.6.28"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "456c603be3e8d448b072f410900c09faf164fbce2d480456f50eea6e25f9c848"
-
-[[package]]
-name = "rubocop"
-version = "0.1.0"
-dependencies = [
- "lazy_static",
- "lib-ruby-parser",
- "regex",
-]
