@@ -7,6 +7,7 @@ use lib_ruby_parser::Node;
 use lib_ruby_parser::{Parser, ParserOptions, ParserResult};
 use std::fs;
 use std::ops::Range;
+use std::str;
 use std::sync::Mutex;
 
 pub struct File {
@@ -65,14 +66,28 @@ impl<'a> File {
             .line_col_for_pos(range.start)
             .unwrap();
 
+        let source_line = &self.parser_result.input.lines[line];
+        let line_string = &self.parser_result.input.bytes[source_line.start..source_line.end];
+
+        let (_, col_end) = self
+            .parser_result
+            .input
+            .line_col_for_pos(range.end)
+            .unwrap();
+
+        let annotation = format!("{}{}", " ".repeat(col), "^".repeat(col_end - col));
+
         let msg = format!(
-            "{}:{}:{}: {} {}",
+            "{}:{}:{}: {} {}\n{}{}",
             self.filepath,
-            line,
-            col,
+            line + 1,
+            col + 1,
             cop_name,
-            message.to_string()
+            message.to_string(),
+            str::from_utf8(line_string).unwrap(),
+            annotation
         );
+
         self.offenses.lock().unwrap().push(msg);
     }
 
