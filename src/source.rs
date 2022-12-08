@@ -78,6 +78,16 @@ impl<'a> File {
                     self.iterate_nodes(&statement);
                 }
             }
+            Node::Module(n) => {
+                if let Some(body) = &n.body {
+                    self.iterate_nodes(&body);
+                }
+            }
+            Node::Class(n) => {
+                if let Some(body) = &n.body {
+                    self.iterate_nodes(&body);
+                }
+            }
             _ => (),
         }
     }
