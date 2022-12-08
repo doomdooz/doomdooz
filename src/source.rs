@@ -52,11 +52,14 @@ impl<'a> File {
     }
 
     pub fn process(&self) {
-        let ast = self.parser_result.ast.as_ref().unwrap();
-        self.iterate_nodes(&*ast);
+        let ast = self.parser_result.ast.as_ref();
 
-        for handler in TOKENS_HANLDERS.lock().unwrap().iter() {
-            handler(&self.parser_result.tokens, self);
+        if let Some(ast) = ast {
+            self.iterate_nodes(&*ast);
+
+            for handler in TOKENS_HANLDERS.lock().unwrap().iter() {
+                handler(&self.parser_result.tokens, self);
+            }
         }
     }
 
