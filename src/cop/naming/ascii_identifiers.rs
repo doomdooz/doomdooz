@@ -1,5 +1,5 @@
-// use lib_ruby_parser::parser::SymbolKind;
-use crate::reporting::add_offense;
+use crate::cop::register_tokens_handler;
+use crate::source;
 use lib_ruby_parser::Bytes;
 use lib_ruby_parser::{ParserResult, Token};
 use regex::Regex;
@@ -9,11 +9,15 @@ static IDENTIFIER_MSG: &str = "Use only ascii symbols in identifiers.";
 static CONSTANT_MSG: &str = "Use only ascii symbols in constants.";
 static COP_NAME: &str = "Naming/AsciiIdentifiers";
 
-pub fn run(result: ParserResult) {
-    for token in &result.tokens {
+pub fn init() {
+    register_tokens_handler(on_tokens);
+}
+
+pub fn on_tokens(tokens: &Vec<Token>, file: &source::File) {
+    for token in tokens {
         if should_scheck(&token) && !is_ascci(&token.token_value) {
             let offense = first_offense_range(&token);
-            add_offense(&crate::OFFENSES, offense, IDENTIFIER_MSG);
+            file.add_offense(COP_NAME, offense, IDENTIFIER_MSG);
         }
     }
 }
@@ -39,21 +43,17 @@ fn first_offense_range(token: &Token) -> Range<usize> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::reporting;
-    use crate::testing;
+    use crate::testing::*;
 
     #[test]
     fn ascii_variable_identifier() {
-        testing::execute("name= 'aa'", run);
+        super::init();
 
-        assert_eq!(reporting::total(&crate::OFFENSES), 0);
+        expect_no_offense("name = 'aaa'");
     }
 
     #[test]
     fn non_ascii_variable_identifier() {
-        testing::execute("foo∂∂bar = 'aa'", run);
-
-        // assert_eq!(reporting::total(), 1);
+        expect_offense("foo∂∂bar = 'aa'");
     }
 }

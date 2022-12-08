@@ -1,7 +1,7 @@
 use crate::cop;
 use crate::types;
 use crate::NODE_HANDLERS;
-use crate::OFFENSES;
+use crate::TOKENS_HANLDERS;
 use lib_ruby_parser::source::DecodedInput;
 use lib_ruby_parser::Node;
 use lib_ruby_parser::{Parser, ParserOptions, ParserResult};
@@ -54,6 +54,10 @@ impl<'a> File {
     pub fn process(&self) {
         let ast = self.parser_result.ast.as_ref().unwrap();
         self.iterate_nodes(&*ast);
+
+        for handler in TOKENS_HANLDERS.lock().unwrap().iter() {
+            handler(&self.parser_result.tokens, self);
+        }
     }
 
     fn iterate_nodes(&self, node: &Node) {
