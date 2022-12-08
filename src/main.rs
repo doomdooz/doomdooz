@@ -1,4 +1,5 @@
 #![allow(dead_code, unused_imports)]
+use glob::glob;
 use lib_ruby_parser::Node;
 use lib_ruby_parser::Token;
 use std::collections::HashMap;
@@ -21,17 +22,22 @@ lazy_static! {
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     cop::init();
 
-    let args: Vec<String> = env::args().skip(1).collect();
+    let mut args: Vec<String> = env::args().skip(1).collect();
 
-    if args.len() != 1 {
-        println!("pass a file");
-        return Ok(());
+    if args.len() == 0 {
+        args.push(String::from("**/*.rb"));
     }
 
     for filepath in args {
-        let file = source::File::new(filepath);
-        file.process();
-        file.print_report();
+        for entry in glob(&filepath).unwrap() {
+            if let Ok(path) = entry {
+                let file = source::File::new(path.to_str().unwrap().to_string());
+                file.process();
+                file.print_report();
+            } else {
+                panic!("error while reading path");
+            }
+        }
     }
 
     Ok(())
