@@ -36,37 +36,33 @@ pub fn on_def(node: &Node, file: &source::File) {
 
 #[cfg(test)]
 mod tests {
-    use crate::testing::*;
-
     #[test]
     fn it_detects_get_attribute() {
-        super::init();
-
-        expect_offense(
+        crate::expect_offense!(
             "
             def get_attribute
             end
-        ",
+        "
         );
     }
 
     #[test]
     fn it_detects_set_attribute() {
-        expect_offense(
+        crate::expect_offense!(
             "
             def set_attribute(aa)
             end
-        ",
+        "
         );
     }
 
     #[test]
     fn it_works_fine_with_other_method_names() {
-        expect_no_offense(
+        crate::expect_no_offense!(
             "
             def set_name
             end
-        ",
+        "
         );
     }
 }

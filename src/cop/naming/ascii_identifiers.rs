@@ -43,17 +43,13 @@ fn first_offense_range(token: &Token) -> Range<usize> {
 
 #[cfg(test)]
 mod tests {
-    use crate::testing::*;
-
     #[test]
     fn ascii_variable_identifier() {
-        super::init();
-
-        expect_no_offense("name = 'aaa'");
+        crate::expect_no_offense!("name = 'aaa'");
     }
 
     #[test]
     fn non_ascii_variable_identifier() {
-        expect_offense("foo∂∂bar = 'aa'");
+        crate::expect_offense!("foo∂∂bar = 'aa'");
     }
 }

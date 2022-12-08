@@ -1,47 +1,32 @@
-use lib_ruby_parser::{Node, Parser, ParserOptions, ParserResult};
+#[macro_export]
+macro_rules! expect_offense {
+    ($source:expr) => {
+        super::init();
 
-pub fn parse(source: &str) -> ParserResult {
-    let options = ParserOptions {
-        ..Default::default()
+        let file = crate::source::File::inline($source);
+
+        file.process();
+
+        file.print_report();
+
+        assert_eq!(file.total_offenses(), 1);
+
+        crate::NODE_HANDLERS.lock().unwrap().clear();
+        crate::TOKENS_HANLDERS.lock().unwrap().clear();
     };
-
-    let parser = Parser::new(source, options);
-
-    parser.do_parse()
 }
 
-pub fn ast(source: &str) -> Node {
-    let options = ParserOptions {
-        ..Default::default()
+#[macro_export]
+macro_rules! expect_no_offense {
+    ($source:expr) => {
+        super::init();
+
+        let file = crate::source::File::inline($source);
+        file.process();
+
+        assert_eq!(file.total_offenses(), 0);
+
+        crate::NODE_HANDLERS.lock().unwrap().clear();
+        crate::TOKENS_HANLDERS.lock().unwrap().clear();
     };
-
-    let parser = Parser::new(source, options);
-
-    *parser.do_parse().ast.unwrap()
-}
-
-pub fn execute(source: &str, cop_func: fn(ParserResult)) {
-    let options = ParserOptions {
-        ..Default::default()
-    };
-
-    let parser = Parser::new(source, options);
-
-    let result = parser.do_parse();
-
-    cop_func(result);
-}
-
-pub fn expect_no_offense(source: &'static str) {
-    let file = crate::source::File::inline(source);
-    file.process();
-
-    assert_eq!(file.total_offenses(), 0);
-}
-
-pub fn expect_offense(source: &'static str) {
-    let file = crate::source::File::inline(source);
-    file.process();
-
-    assert_eq!(file.total_offenses(), 1);
 }

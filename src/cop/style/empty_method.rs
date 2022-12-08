@@ -37,17 +37,13 @@ pub fn on_def(node: &Node, file: &source::File) {
 
 #[cfg(test)]
 mod tests {
-    use crate::testing::*;
-
     #[test]
     fn it_works() {
-        super::init();
-
-        expect_offense(
+        crate::expect_offense!(
             "
             def name
             end
-        ",
+        "
         );
     }
 }

@@ -8,10 +8,14 @@ use lib_ruby_parser::Node;
 use lib_ruby_parser::Token;
 use std::sync::Mutex;
 
+#[cfg(test)]
 pub fn init() {
     naming::init();
     style::init();
 }
+
+#[cfg(not(test))]
+pub fn init() {}
 
 pub fn register_node_handler(node_name: &'static str, handler: types::NodeHandler) {
     let mut map = NODE_HANDLERS.lock().unwrap();
