@@ -4,9 +4,6 @@ pub mod style;
 use crate::types;
 use crate::NODE_HANDLERS;
 use crate::TOKENS_HANLDERS;
-use lib_ruby_parser::Node;
-use lib_ruby_parser::Token;
-use std::sync::Mutex;
 
 #[cfg(not(test))]
 pub fn init() {

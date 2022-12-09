@@ -1,7 +1,7 @@
 use crate::source;
-use lib_ruby_parser::source::DecodedInput;
-use lib_ruby_parser::Node;
-use lib_ruby_parser::Token;
+pub use lib_ruby_parser::{
+    source::DecodedInput, Bytes, Node, Parser, ParserOptions, ParserResult, Token,
+};
 use std::collections::HashMap;
 use std::sync::Mutex;
 

@@ -1,7 +1,5 @@
-#![allow(dead_code, unused_imports)]
+// #![allow(dead_code, unused_imports)]
 use glob::glob;
-use lib_ruby_parser::Node;
-use lib_ruby_parser::Token;
 use std::collections::HashMap;
 use std::env;
 use std::sync::Mutex;

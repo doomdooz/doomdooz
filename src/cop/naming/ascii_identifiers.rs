@@ -1,19 +1,18 @@
 use crate::cop::register_tokens_handler;
 use crate::source;
-use lib_ruby_parser::Bytes;
-use lib_ruby_parser::{ParserResult, Token};
+use crate::types;
 use regex::Regex;
 use std::ops::Range;
 
 static IDENTIFIER_MSG: &str = "Use only ascii symbols in identifiers.";
-static CONSTANT_MSG: &str = "Use only ascii symbols in constants.";
+// static CONSTANT_MSG: &str = "Use only ascii symbols in constants.";
 static COP_NAME: &str = "Naming/AsciiIdentifiers";
 
 pub fn init() {
     register_tokens_handler(on_tokens);
 }
 
-pub fn on_tokens(tokens: &Vec<Token>, file: &source::File) {
+pub fn on_tokens(tokens: &Vec<types::Token>, file: &source::File) {
     for token in tokens {
         if should_scheck(&token) && !is_ascci(&token.token_value) {
             let offense = first_offense_range(&token);
@@ -22,15 +21,15 @@ pub fn on_tokens(tokens: &Vec<Token>, file: &source::File) {
     }
 }
 
-fn is_ascci(bytes: &Bytes) -> bool {
+fn is_ascci(bytes: &types::Bytes) -> bool {
     bytes.to_string().unwrap().is_ascii()
 }
 
-fn should_scheck(token: &Token) -> bool {
+fn should_scheck(token: &types::Token) -> bool {
     token.token_name() == "tIDENTIFIER"
 }
 
-fn first_offense_range(token: &Token) -> Range<usize> {
+fn first_offense_range(token: &types::Token) -> Range<usize> {
     let re = Regex::new(r"[^[:ascii:]]+").unwrap();
     let binding = token.token_value.to_string().unwrap();
     let mat = re.find(&binding).unwrap();
