@@ -1,7 +1,9 @@
+pub mod default;
 pub mod naming;
 pub mod style;
 
 use crate::types;
+use crate::COPS;
 use crate::NODE_HANDLERS;
 use crate::TOKENS_HANLDERS;
 
@@ -23,4 +25,8 @@ pub fn register_node_handler(node_name: &'static str, handler: types::NodeHandle
 
 pub fn register_tokens_handler(handler: types::TokensHandler) {
     TOKENS_HANLDERS.lock().unwrap().push(handler);
+}
+
+pub fn register(cop: &'static types::Cop) {
+    COPS.lock().unwrap().push(cop);
 }

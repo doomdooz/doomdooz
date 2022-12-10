@@ -15,6 +15,7 @@ mod types;
 lazy_static! {
     static ref NODE_HANDLERS: types::NodeHandlersMap = Mutex::new(HashMap::new());
     static ref TOKENS_HANLDERS: Mutex<Vec<types::TokensHandler>> = Mutex::new(vec![]);
+    static ref COPS: Mutex<Vec<&'static types::Cop<'static>>> = Mutex::new(vec![]);
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {

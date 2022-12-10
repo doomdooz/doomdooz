@@ -1,3 +1,4 @@
+use crate::cop;
 use crate::cop::register_node_handler;
 use crate::source;
 use crate::types;
@@ -5,7 +6,7 @@ use crate::types;
 static MSG: &str = "Put empty method definitions on a single line.";
 
 lazy_static! {
-    static ref COP: types::Config<'static> = types::Config {
+    static ref COP: types::Cop<'static> = types::Cop {
         cop_name: "Style/EmptyMethod",
         enabled: true,
         description: "Checks the formatting of empty method definitions.",
@@ -19,6 +20,8 @@ lazy_static! {
 
 pub fn init() {
     register_node_handler("def", on_def);
+
+    cop::register(&COP);
 }
 
 pub fn on_def(node: &types::Node, file: &source::File) {
