@@ -9,6 +9,7 @@ extern crate lazy_static;
 
 mod cop;
 mod source;
+mod target_finder;
 mod testing;
 mod types;
 
@@ -20,6 +21,8 @@ lazy_static! {
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     cop::init();
+
+    target_finder::scan();
 
     let mut args: Vec<String> = env::args().skip(1).collect();
     let mut inspected_files: usize = 0;

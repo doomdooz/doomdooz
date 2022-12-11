@@ -1,3 +1,4 @@
+pub mod bundler;
 pub mod default;
 pub mod naming;
 pub mod style;
@@ -11,6 +12,7 @@ use crate::TOKENS_HANLDERS;
 pub fn init() {
     naming::init();
     style::init();
+    bundler::init();
 }
 
 #[cfg(test)]

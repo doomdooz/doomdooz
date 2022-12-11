@@ -1,7 +1,7 @@
 use crate::types;
 
 lazy_static! {
-    static ref COP: types::Cop<'static> = types::Cop {
+    pub static ref COP: types::Cop<'static> = types::Cop {
         cop_name: "Default",
         enabled: false,
         description: "Default Cop used for Settings",
