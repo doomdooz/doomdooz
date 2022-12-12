@@ -1,8 +1,4 @@
-#![allow(dead_code, unused_imports, unused_assignments)]
-use glob::glob;
 use std::collections::HashMap;
-use std::collections::HashSet;
-use std::env;
 use std::sync::Mutex;
 
 #[macro_use]
@@ -36,7 +32,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     for (filepath, active_cops) in files.iter() {
         let file = source::File::new(filepath.clone(), active_cops);
         file.process();
-        // file.print_report();
+        file.print_report();
         inspected_files += 1;
         offenses += file.total_offenses();
     }

@@ -1,5 +1,4 @@
 use crate::cop;
-use crate::types;
 
 static COP_NAME: &str = "Bundler/DuplicatedGem";
 

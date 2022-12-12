@@ -3,7 +3,6 @@ use crate::COPS;
 use crate::TARGET_FILES;
 use glob::glob;
 use std::collections::HashSet;
-use std::{env, fs};
 
 pub fn scan() {
     // TODO: there is a lot of space to optimize this function

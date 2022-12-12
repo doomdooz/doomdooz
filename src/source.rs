@@ -1,5 +1,4 @@
 use crate::types;
-use crate::CONFIG;
 use crate::NODE_HANDLERS;
 use crate::TOKENS_HANLDERS;
 use std::collections::HashSet;
