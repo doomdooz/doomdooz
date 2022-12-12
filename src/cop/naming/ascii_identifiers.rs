@@ -1,3 +1,4 @@
+use crate::cop;
 use crate::cop::register_tokens_handler;
 use crate::source;
 use crate::types;
@@ -10,6 +11,8 @@ static COP_NAME: &str = "Naming/AsciiIdentifiers";
 
 pub fn init() {
     register_tokens_handler(on_tokens, COP_NAME);
+
+    cop::register(COP_NAME);
 }
 
 pub fn on_tokens(tokens: &Vec<types::Token>, file: &source::File) {

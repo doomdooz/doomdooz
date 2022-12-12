@@ -17,7 +17,7 @@ pub struct File<'a> {
 
 impl<'a> File<'a> {
     #[cfg(test)]
-    pub fn inline(source: &'static str) -> File {
+    pub fn inline(source: &'static str, active_cops: &'a HashSet<&str>) -> File<'a> {
         let options = types::ParserOptions {
             ..Default::default()
         };
@@ -29,6 +29,7 @@ impl<'a> File<'a> {
         File {
             filepath: "".to_string(),
             parser_result: parser_result,
+            active_cops: active_cops,
             offenses: Mutex::new(vec![]),
         }
     }

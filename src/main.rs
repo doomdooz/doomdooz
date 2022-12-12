@@ -36,7 +36,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     for (filepath, active_cops) in files.iter() {
         let file = source::File::new(filepath.clone(), active_cops);
         file.process();
-        file.print_report();
+        // file.print_report();
         inspected_files += 1;
         offenses += file.total_offenses();
     }
