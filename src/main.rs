@@ -25,29 +25,19 @@ lazy_static! {
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     cop::init();
-
     target_finder::scan();
 
-    let mut args: Vec<String> = env::args().skip(1).collect();
     let mut inspected_files: usize = 0;
     let mut offenses: usize = 0;
 
-    if args.len() == 0 {
-        args.push(String::from("**/*.rb"));
-    }
+    let files = TARGET_FILES.lock().unwrap();
 
-    for filepath in args {
-        for entry in glob(&filepath).unwrap() {
-            if let Ok(path) = entry {
-                let file = source::File::new(path.to_str().unwrap().to_string());
-                file.process();
-                file.print_report();
-                inspected_files += 1;
-                offenses += file.total_offenses();
-            } else {
-                panic!("error while reading path");
-            }
-        }
+    for (filepath, active_cops) in files.iter() {
+        let file = source::File::new(filepath.clone(), active_cops);
+        file.process();
+        file.print_report();
+        inspected_files += 1;
+        offenses += file.total_offenses();
     }
 
     println!(

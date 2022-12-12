@@ -16,9 +16,6 @@ pub fn scan() {
             let mut exclude_list: Vec<String> = vec![];
             let include_patterns = CONFIG.get_array(cop, "Include");
             let exclude_patterns = CONFIG.get_array(cop, "Exclude");
-            dbg!(cop);
-            dbg!(&include_patterns);
-            dbg!(&exclude_patterns);
 
             for include_pattern in include_patterns {
                 for entry in glob(include_pattern.as_ref()).unwrap() {

@@ -2,18 +2,20 @@ use crate::types;
 use crate::CONFIG;
 use crate::NODE_HANDLERS;
 use crate::TOKENS_HANLDERS;
+use std::collections::HashSet;
 use std::fs;
 use std::ops::Range;
 use std::str;
 use std::sync::Mutex;
 
-pub struct File {
+pub struct File<'a> {
     filepath: String,
     offenses: types::OffenseList,
+    active_cops: &'a HashSet<&'a str>,
     pub parser_result: types::ParserResult,
 }
 
-impl<'a> File {
+impl<'a> File<'a> {
     #[cfg(test)]
     pub fn inline(source: &'static str) -> File {
         let options = types::ParserOptions {
@@ -31,7 +33,7 @@ impl<'a> File {
         }
     }
 
-    pub fn new(filepath: String) -> File {
+    pub fn new(filepath: String, active_cops: &'a HashSet<&str>) -> File<'a> {
         let options = types::ParserOptions {
             ..Default::default()
         };
@@ -45,6 +47,7 @@ impl<'a> File {
         File {
             filepath: filepath,
             parser_result: parser_result,
+            active_cops: active_cops,
             offenses: Mutex::new(vec![]),
         }
     }
