@@ -22,6 +22,8 @@ lazy_static! {
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     cop::init();
+
+    // too slow
     target_finder::scan();
 
     let mut inspected_files: usize = 0;
