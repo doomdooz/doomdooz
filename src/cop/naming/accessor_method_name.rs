@@ -35,6 +35,8 @@ pub fn on_def(node: &types::Node, file: &source::File) {
 mod tests {
     #[test]
     fn it_detects_get_attribute() {
+        dbg!("mohsen");
+        dbg!(crate::NODE_HANDLERS.lock().unwrap().len());
         crate::expect_offense!(
             "
             def get_attribute

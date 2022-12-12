@@ -6,16 +6,17 @@ use crate::types;
 use crate::COPS;
 use crate::NODE_HANDLERS;
 use crate::TOKENS_HANLDERS;
+use std::sync::Once;
 
-#[cfg(not(test))]
+static INIT: Once = Once::new();
+
 pub fn init() {
-    naming::init();
-    style::init();
-    bundler::init();
+    INIT.call_once(|| {
+        naming::init();
+        style::init();
+        bundler::init();
+    });
 }
-
-#[cfg(test)]
-pub fn init() {}
 
 pub fn register_node_handler(
     node_name: &'static str,
