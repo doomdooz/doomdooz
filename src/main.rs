@@ -1,12 +1,14 @@
-// #![allow(dead_code, unused_imports)]
+#![allow(dead_code, unused_imports, unused_assignments)]
 use glob::glob;
 use std::collections::HashMap;
+use std::collections::HashSet;
 use std::env;
 use std::sync::Mutex;
 
 #[macro_use]
 extern crate lazy_static;
 
+mod config;
 mod cop;
 mod source;
 mod target_finder;
@@ -16,7 +18,9 @@ mod types;
 lazy_static! {
     static ref NODE_HANDLERS: types::NodeHandlersMap = Mutex::new(HashMap::new());
     static ref TOKENS_HANLDERS: Mutex<Vec<types::TokensHandler>> = Mutex::new(vec![]);
-    static ref COPS: Mutex<Vec<&'static types::Cop<'static>>> = Mutex::new(vec![]);
+    static ref COPS: Mutex<Vec<&'static str>> = Mutex::new(vec![]);
+    static ref CONFIG: config::Config = config::load();
+    static ref TARGET_FILES: types::TargetFilesMap = Mutex::new(HashMap::new());
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {

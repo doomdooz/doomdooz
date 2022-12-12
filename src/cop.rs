@@ -1,5 +1,4 @@
 pub mod bundler;
-pub mod default;
 pub mod naming;
 pub mod style;
 
@@ -18,17 +17,21 @@ pub fn init() {
 #[cfg(test)]
 pub fn init() {}
 
-pub fn register_node_handler(node_name: &'static str, handler: types::NodeHandler) {
+pub fn register_node_handler(
+    node_name: &'static str,
+    cop_name: &'static str,
+    handler: types::NodeHandler,
+) {
     let mut map = NODE_HANDLERS.lock().unwrap();
 
     let entry = map.entry(node_name).or_insert(vec![]);
-    entry.push(handler);
+    entry.push((cop_name, handler));
 }
 
 pub fn register_tokens_handler(handler: types::TokensHandler) {
     TOKENS_HANLDERS.lock().unwrap().push(handler);
 }
 
-pub fn register(cop: &'static types::Cop) {
-    COPS.lock().unwrap().push(cop);
+pub fn register(cop_name: &'static str) {
+    COPS.lock().unwrap().push(cop_name);
 }

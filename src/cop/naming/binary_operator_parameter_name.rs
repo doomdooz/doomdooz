@@ -8,7 +8,7 @@ const METHODS: [&str; 9] = ["+", "-", "[]", "[]=", "<<", "===", "=~", "eql?", "e
 static COP_NAME: &str = "Naming/BinaryOperatorParameterName";
 
 pub fn init() {
-    register_node_handler("def", on_def);
+    register_node_handler("def", COP_NAME, on_def);
 }
 
 pub fn on_def(node: &types::Node, file: &source::File) {

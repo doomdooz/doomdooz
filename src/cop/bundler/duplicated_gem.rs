@@ -1,23 +1,8 @@
 use crate::cop;
 use crate::types;
 
-lazy_static! {
-    static ref COP: types::Cop<'static> = types::Cop {
-        cop_name: "Bundler/DuplicatedGem",
-        enabled: true,
-        description: "Checks for duplicate gem entries in Gemfile.",
-        style_guide: "",
-        supported_styles: Some(vec!["compact".into(), "expanded".into()]),
-        include: Some(vec![
-            String::from("**/*.gemfile"),
-            String::from("**/Gemfile"),
-            String::from("**/gems.rb")
-        ]),
-        exclude: None,
-        parent_config: Some(&cop::default::COP),
-    };
-}
+static COP_NAME: &str = "Bundler/DuplicatedGem";
 
 pub fn init() {
-    cop::register(&COP);
+    cop::register(COP_NAME);
 }

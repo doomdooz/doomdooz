@@ -4,24 +4,12 @@ use crate::source;
 use crate::types;
 
 static MSG: &str = "Put empty method definitions on a single line.";
-
-lazy_static! {
-    static ref COP: types::Cop<'static> = types::Cop {
-        cop_name: "Style/EmptyMethod",
-        enabled: true,
-        description: "Checks the formatting of empty method definitions.",
-        style_guide: "#no-single-line-methods",
-        supported_styles: Some(vec!["compact".into(), "expanded".into()]),
-        include: None,
-        exclude: None,
-        parent_config: None,
-    };
-}
+static COP_NAME: &str = "Style/EmptyMethod";
 
 pub fn init() {
-    register_node_handler("def", on_def);
+    register_node_handler("def", COP_NAME, on_def);
 
-    cop::register(&COP);
+    cop::register(COP_NAME);
 }
 
 pub fn on_def(node: &types::Node, file: &source::File) {
@@ -39,7 +27,7 @@ pub fn on_def(node: &types::Node, file: &source::File) {
                 .unwrap();
 
             if name_line != end_line {
-                file.add_offense(COP.cop_name, node.keyword_l.begin..node.name_l.end, MSG);
+                file.add_offense(COP_NAME, node.keyword_l.begin..node.name_l.end, MSG);
             }
         }
     }

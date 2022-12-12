@@ -1,4 +1,5 @@
 use crate::types;
+use crate::CONFIG;
 use crate::NODE_HANDLERS;
 use crate::TOKENS_HANLDERS;
 use std::fs;
@@ -64,8 +65,10 @@ impl<'a> File {
         let node_type = node.str_type();
 
         if let Some(handlers) = NODE_HANDLERS.lock().unwrap().get(node_type) {
-            for handler in handlers {
-                handler(node, self);
+            for (cop_name, handler) in handlers {
+                if CONFIG.is_enabled(cop_name) {
+                    handler(node, self);
+                }
             }
         }
 

@@ -15,21 +15,23 @@ pub fn load() -> Config {
 
 impl Config {
     pub fn get_array(&self, cop: &str, key: &str) -> Vec<String> {
-        // TODO: consider AllCops as fallback
         let cop_config = &self.0[&Yaml::String(cop.to_string())];
-        // let default_config = &self.0[&Yaml::String("AllCops".to_string())];
         let mut output: Vec<String> = vec![];
 
-        if let Yaml::Array(array) = &cop_config[key] {
-            for item in array {
-                if let Yaml::String(string) = item {
-                    output.push(string.clone());
-                } else {
-                    panic!("item has to be string");
+        match &cop_config[key] {
+            Yaml::Array(array) => {
+                for item in array {
+                    if let Yaml::String(string) = item {
+                        output.push(string.clone());
+                    } else {
+                        panic!("item has to be string");
+                    }
                 }
             }
-        } else {
-            panic!("the key should be array");
+            Yaml::BadValue => {
+                return self.get_array("AllCops", key);
+            }
+            _ => (),
         }
 
         output
