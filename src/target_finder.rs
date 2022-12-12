@@ -1,7 +1,7 @@
 use crate::CONFIG;
 use crate::COPS;
 use crate::TARGET_FILES;
-use glob::glob;
+use globwalk;
 use std::collections::HashSet;
 
 pub fn scan() {
@@ -11,32 +11,25 @@ pub fn scan() {
 
     for cop in cops.iter() {
         if CONFIG.is_enabled(cop) {
-            let mut include_list: Vec<String> = vec![];
-            let mut exclude_list: Vec<String> = vec![];
-            let include_patterns = CONFIG.get_array(cop, "Include");
-            let exclude_patterns = CONFIG.get_array(cop, "Exclude");
+            let mut patterns = CONFIG.get_array(cop, "Include");
 
-            for include_pattern in include_patterns {
-                for entry in glob(include_pattern.as_ref()).unwrap() {
-                    if let Ok(path) = entry {
-                        include_list.push(path.display().to_string());
-                    }
-                }
+            for exclude in CONFIG.get_array(cop, "Exclude") {
+                let string = String::from("!") + &exclude;
+                patterns.push(string);
             }
 
-            for exclude_pattern in exclude_patterns {
-                for entry in glob(exclude_pattern.as_ref()).unwrap() {
-                    if let Ok(path) = entry {
-                        exclude_list.push(path.display().to_string());
-                    }
-                }
-            }
+            let walker = globwalk::GlobWalkerBuilder::from_patterns(".", &patterns)
+                .file_type(globwalk::FileType::FILE)
+                .build()
+                .unwrap()
+                .into_iter()
+                .filter_map(Result::ok);
 
-            for file in &include_list {
-                if !exclude_list.contains(file) {
-                    let entry = &mut target_files.entry(file.clone()).or_insert(HashSet::new());
-                    entry.insert(cop);
-                }
+            for file in walker {
+                let entry = &mut target_files
+                    .entry(file.path().display().to_string())
+                    .or_insert(HashSet::new());
+                entry.insert(cop);
             }
         }
     }
