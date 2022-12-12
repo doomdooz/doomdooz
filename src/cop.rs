@@ -28,8 +28,8 @@ pub fn register_node_handler(
     entry.push((cop_name, handler));
 }
 
-pub fn register_tokens_handler(handler: types::TokensHandler) {
-    TOKENS_HANLDERS.lock().unwrap().push(handler);
+pub fn register_tokens_handler(handler: types::TokensHandler, cop_name: &'static str) {
+    TOKENS_HANLDERS.lock().unwrap().push((cop_name, handler));
 }
 
 pub fn register(cop_name: &'static str) {

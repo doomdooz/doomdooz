@@ -52,14 +52,19 @@ impl<'a> File<'a> {
         }
     }
 
+    pub fn is_enabled(&self, cop_name: &'static str) -> bool {
+        self.active_cops.contains(cop_name)
+    }
+
     pub fn process(&self) {
         let ast = self.parser_result.ast.as_ref();
 
         if let Some(ast) = ast {
             self.iterate_nodes(&*ast);
-
-            for handler in TOKENS_HANLDERS.lock().unwrap().iter() {
-                handler(&self.parser_result.tokens, self);
+            for (cop_name, handler) in TOKENS_HANLDERS.lock().unwrap().iter() {
+                if self.is_enabled(cop_name) {
+                    handler(&self.parser_result.tokens, self);
+                }
             }
         }
     }
@@ -69,7 +74,7 @@ impl<'a> File<'a> {
 
         if let Some(handlers) = NODE_HANDLERS.lock().unwrap().get(node_type) {
             for (cop_name, handler) in handlers {
-                if CONFIG.is_enabled(cop_name) {
+                if self.is_enabled(cop_name) {
                     handler(node, self);
                 }
             }

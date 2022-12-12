@@ -9,7 +9,7 @@ static IDENTIFIER_MSG: &str = "Use only ascii symbols in identifiers.";
 static COP_NAME: &str = "Naming/AsciiIdentifiers";
 
 pub fn init() {
-    register_tokens_handler(on_tokens);
+    register_tokens_handler(on_tokens, COP_NAME);
 }
 
 pub fn on_tokens(tokens: &Vec<types::Token>, file: &source::File) {
