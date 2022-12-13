@@ -80,6 +80,7 @@ impl<'a> File<'a> {
             }
         }
 
+        // TODO: implement all types
         match node {
             types::Node::Begin(n) => {
                 for statement in &n.statements {
@@ -92,6 +93,11 @@ impl<'a> File<'a> {
                 }
             }
             types::Node::Class(n) => {
+                if let Some(body) = &n.body {
+                    self.iterate_nodes(&body);
+                }
+            }
+            types::Node::Block(n) => {
                 if let Some(body) = &n.body {
                     self.iterate_nodes(&body);
                 }
