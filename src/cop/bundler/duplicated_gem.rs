@@ -49,3 +49,16 @@ pub fn on_send(node: &types::Node, file: &source::File) {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn it_detects_offenses() {
+        crate::expect_offense!(
+            "
+            gem 'rails'
+            gem 'rails'
+        "
+        );
+    }
+}
