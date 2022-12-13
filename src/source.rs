@@ -106,7 +106,12 @@ impl<'a> File<'a> {
         }
     }
 
-    pub fn add_offense(&self, cop_name: &'static str, range: Range<usize>, message: &'static str) {
+    pub fn add_offense<T: AsRef<str> + std::fmt::Display>(
+        &self,
+        cop_name: &'static str,
+        range: Range<usize>,
+        message: T,
+    ) {
         let (line, col) = self
             .parser_result
             .input
@@ -130,7 +135,7 @@ impl<'a> File<'a> {
             line + 1,
             col + 1,
             cop_name,
-            message.to_string(),
+            message,
             str::from_utf8(line_string).unwrap(),
             annotation
         );

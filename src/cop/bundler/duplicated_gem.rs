@@ -26,11 +26,14 @@ pub fn on_send(node: &types::Node, file: &source::File) {
                 if let types::Node::Str(gem) = &node.args[0] {
                     let gem_name = gem.value.to_string().unwrap();
 
-                    if let Some(_line) = gems.get(&gem_name) {
+                    if let Some(line) = gems.get(&gem_name) {
+                        let line = line + 1;
+
                         file.add_offense(
                             COP_NAME,
                             gem.expression_l.begin..gem.expression_l.end,
-                            MSG,
+                            MSG.replace("%gem_name%", &gem_name)
+                                .replace("%line_number%", &line.to_string()),
                         );
                     } else {
                         let (line, _) = file
