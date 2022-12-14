@@ -1,3 +1,4 @@
+use rayon::prelude::*;
 use std::collections::HashMap;
 use std::sync::Mutex;
 
@@ -26,23 +27,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // too slow
     target_finder::scan();
 
-    let mut inspected_files: usize = 0;
-    let mut offenses: usize = 0;
-
     let files = TARGET_FILES.lock().unwrap();
 
-    for (filepath, active_cops) in files.iter() {
-        let file = source::File::new(filepath.clone(), active_cops);
-        file.process();
-        file.print_report();
-        inspected_files += 1;
-        offenses += file.total_offenses();
-    }
-
-    println!(
-        "{} files inspected, {} offenses detected, XXX offenses autocorrectable",
-        inspected_files, offenses
-    );
+    files
+        .par_iter()
+        .map(|(filepath, active_cops)| {
+            let file = source::File::new(filepath.clone(), active_cops);
+            file.process();
+            file.print_report();
+        })
+        .count();
 
     Ok(())
 }
