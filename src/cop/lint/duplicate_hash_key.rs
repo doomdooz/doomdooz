@@ -2,7 +2,6 @@ use crate::cop;
 use crate::cop::register_node_handler;
 use crate::source;
 use crate::types;
-use std::collections::HashMap;
 use std::collections::HashSet;
 
 static MSG: &str = "Duplicated key in hash literal.";
@@ -49,6 +48,7 @@ mod tests {
         crate::expect_no_offense!("hash = { name: 'mohsen', age: '33' }");
     }
 
+    #[test]
     fn it_detects_offense() {
         crate::expect_offense!("hash = { name: 'mohsen', name: 'other' }");
     }
