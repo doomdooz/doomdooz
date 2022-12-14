@@ -1,4 +1,5 @@
 pub mod bundler;
+pub mod lint;
 pub mod naming;
 pub mod style;
 
@@ -15,6 +16,7 @@ pub fn init() {
         naming::init();
         style::init();
         bundler::init();
+        lint::init();
     });
 }
 

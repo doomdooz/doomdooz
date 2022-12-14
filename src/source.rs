@@ -102,6 +102,11 @@ impl<'a> File<'a> {
                     self.iterate_nodes(&body);
                 }
             }
+            types::Node::Lvasgn(n) => {
+                if let Some(body) = &n.value {
+                    self.iterate_nodes(&body);
+                }
+            }
             _ => (),
         }
     }
