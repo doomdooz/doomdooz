@@ -71,15 +71,17 @@ impl<'a> File<'a> {
     }
 
     fn iterate_nodes(&self, node: &types::Node) {
-        let node_type = node.str_type();
-
-        if let Some(handlers) = NODE_HANDLERS.lock().unwrap().get(node_type) {
-            for (cop_name, handler) in handlers {
-                if self.is_enabled(cop_name) {
-                    handler(node, self);
+        let call_handlers = |node_type| {
+            if let Some(handlers) = NODE_HANDLERS.lock().unwrap().get(node_type) {
+                for (cop_name, handler) in handlers {
+                    if self.is_enabled(cop_name) {
+                        handler(node, self);
+                    }
                 }
             }
-        }
+        };
+
+        call_handlers(node.str_type());
 
         // TODO: implement all types
         match node {
@@ -109,18 +111,7 @@ impl<'a> File<'a> {
                 }
             }
             types::Node::Send(n) => {
-                let node_type = "send_".to_owned() + &n.method_name;
-                if let Some(handlers) = NODE_HANDLERS.lock().unwrap().get(node_type.as_str()) {
-                    for (cop_name, handler) in handlers {
-                        if self.is_enabled(cop_name) {
-                            handler(node, self);
-                        }
-                    }
-                }
-                // dbg!(n);
-                // if let Some(body) = &n.value {
-                //     self.iterate_nodes(&body);
-                // }
+                call_handlers(&("send_".to_owned() + &n.method_name));
             }
             _ => (),
         }
