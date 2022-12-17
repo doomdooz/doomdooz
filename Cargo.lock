@@ -117,6 +117,7 @@ dependencies = [
 name = "doomdooz-wasm"
 version = "0.1.0"
 dependencies = [
+ "doomdooz-lib",
  "wasm-bindgen",
 ]
 

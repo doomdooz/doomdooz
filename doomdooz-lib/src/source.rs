@@ -15,8 +15,7 @@ pub struct File<'a> {
 }
 
 impl<'a> File<'a> {
-    #[cfg(test)]
-    pub fn inline(source: &'static str, active_cops: &'a HashSet<&str>) -> File<'a> {
+    pub fn inline(source: String, active_cops: &'a HashSet<&str>) -> File<'a> {
         let options = types::ParserOptions {
             ..Default::default()
         };
@@ -154,6 +153,18 @@ impl<'a> File<'a> {
             .unwrap()
             .iter()
             .for_each(|x| println!("{x}"));
+    }
+
+    pub fn report(&self) -> String {
+        let mut output = String::new();
+
+        self.offenses
+            .lock()
+            .unwrap()
+            .iter()
+            .for_each(|x| output.push_str(x));
+
+        output
     }
 
     pub fn total_offenses(&self) -> usize {

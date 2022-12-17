@@ -1,11 +1,14 @@
+use doomdooz_lib::{cop, source, target_finder, COPS, TARGET_FILES};
+use std::collections::HashSet;
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
-extern "C" {
-    pub fn alert(s: &str);
-}
+pub fn doomdooz(source: String) -> String {
+    cop::init();
 
-#[wasm_bindgen]
-pub fn greet(name: &str) {
-    alert(&format!("Hello, {}!", name));
+    let cops = HashSet::from_iter(COPS.lock().unwrap().iter().cloned());
+    let file = source::File::inline(source, &cops);
+
+    file.process();
+    file.report()
 }
