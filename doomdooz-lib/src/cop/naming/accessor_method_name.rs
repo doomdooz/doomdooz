@@ -17,13 +17,13 @@ pub fn on_def(node: &types::Node, file: &source::File) {
     if let types::Node::Def(node) = node {
         if node.name.starts_with("get_") {
             if None == node.args {
-                file.add_offense(COP_NAME, node.name_l.begin..node.name_l.end, MSG_READER);
+                file.add_offense(COP_NAME, node.name_l, MSG_READER);
             }
         } else if node.name.starts_with("set_") {
             if let Some(args) = &node.args {
                 if let types::Node::Args(args) = &**args {
                     if args.args.len() == 1 {
-                        file.add_offense(COP_NAME, node.name_l.begin..node.name_l.end, MSG_WRITER);
+                        file.add_offense(COP_NAME, node.name_l, MSG_WRITER);
                     }
                 }
             }

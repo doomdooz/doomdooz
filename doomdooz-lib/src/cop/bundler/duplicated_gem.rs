@@ -31,7 +31,7 @@ pub fn on_send(node: &types::Node, file: &source::File) {
 
                         file.add_offense(
                             COP_NAME,
-                            gem.expression_l.begin..gem.expression_l.end,
+                            gem.expression_l,
                             MSG.replace("%gem_name%", &gem_name)
                                 .replace("%line_number%", &line.to_string()),
                         );

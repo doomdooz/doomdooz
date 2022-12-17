@@ -21,7 +21,7 @@ pub fn on_and(node: &types::Node, file: &source::File) {
 
         if let Ok(operator) = operator {
             if operator == "and" {
-                file.add_offense(COP_NAME, node.operator_l.begin..node.operator_l.end, MSG);
+                file.add_offense(COP_NAME, node.operator_l, MSG);
             }
         }
     }

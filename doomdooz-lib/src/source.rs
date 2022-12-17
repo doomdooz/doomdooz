@@ -120,13 +120,13 @@ impl<'a> File<'a> {
     pub fn add_offense<T: AsRef<str> + std::fmt::Display>(
         &self,
         cop_name: &'static str,
-        range: Range<usize>,
+        range: types::Loc,
         message: T,
     ) {
         let (line, col) = self
             .parser_result
             .input
-            .line_col_for_pos(range.start)
+            .line_col_for_pos(range.begin)
             .unwrap();
 
         let source_line = &self.parser_result.input.lines[line];

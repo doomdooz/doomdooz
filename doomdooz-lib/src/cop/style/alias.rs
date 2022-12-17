@@ -19,11 +19,7 @@ pub fn init() {
 pub fn on_alias(node: &types::Node, file: &source::File) {
     if CONFIG.get_string(COP_NAME, "EnforcedStyle") == "prefer_alias_method" {
         if let types::Node::Alias(node) = node {
-            file.add_offense(
-                COP_NAME,
-                node.expression_l.begin..node.expression_l.end,
-                MSG_ALIAS_METHOD,
-            );
+            file.add_offense(COP_NAME, node.expression_l, MSG_ALIAS_METHOD);
         }
     }
 }
@@ -31,11 +27,7 @@ pub fn on_alias(node: &types::Node, file: &source::File) {
 pub fn on_alias_method(node: &types::Node, file: &source::File) {
     if CONFIG.get_string(COP_NAME, "EnforcedStyle") == "prefer_alias" {
         if let types::Node::Send(node) = node {
-            file.add_offense(
-                COP_NAME,
-                node.expression_l.begin..node.expression_l.end,
-                MSG_ALIAS,
-            );
+            file.add_offense(COP_NAME, node.expression_l, MSG_ALIAS);
         }
     }
 }

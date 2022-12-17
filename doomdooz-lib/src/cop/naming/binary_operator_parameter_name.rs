@@ -20,11 +20,7 @@ pub fn on_def(node: &types::Node, file: &source::File) {
                     if args.len() == 1 {
                         if let types::Node::Arg(arg) = args.first().unwrap() {
                             if arg.name != "other" {
-                                file.add_offense(
-                                    COP_NAME,
-                                    arg.expression_l.begin..arg.expression_l.end,
-                                    MSG,
-                                );
+                                file.add_offense(COP_NAME, arg.expression_l, MSG);
                             }
                         }
                     }

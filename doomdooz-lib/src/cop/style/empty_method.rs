@@ -27,7 +27,7 @@ pub fn on_def(node: &types::Node, file: &source::File) {
                 .unwrap();
 
             if name_line != end_line {
-                file.add_offense(COP_NAME, node.keyword_l.begin..node.name_l.end, MSG);
+                file.add_offense(COP_NAME, node.keyword_l, MSG);
             }
         }
     }

@@ -3,7 +3,6 @@ use crate::cop::register_tokens_handler;
 use crate::source;
 use crate::types;
 use regex::Regex;
-use std::ops::Range;
 
 static IDENTIFIER_MSG: &str = "Use only ascii symbols in identifiers.";
 // static CONSTANT_MSG: &str = "Use only ascii symbols in constants.";
@@ -32,13 +31,13 @@ fn should_scheck(token: &types::Token) -> bool {
     token.token_name() == "tIDENTIFIER"
 }
 
-fn first_offense_range(token: &types::Token) -> Range<usize> {
+fn first_offense_range(token: &types::Token) -> types::Loc {
     let re = Regex::new(r"[^[:ascii:]]+").unwrap();
     let binding = token.token_value.to_string().unwrap();
     let mat = re.find(&binding).unwrap();
 
-    Range {
-        start: token.loc.begin + mat.start(),
+    types::Loc {
+        begin: token.loc.begin + mat.start(),
         end: token.loc.begin + mat.end(),
     }
 }

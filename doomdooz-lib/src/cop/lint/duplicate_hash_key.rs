@@ -27,11 +27,7 @@ pub fn on_hash(node: &types::Node, file: &source::File) {
 
                 if !key.is_empty() {
                     if keys.contains(&key) {
-                        file.add_offense(
-                            COP_NAME,
-                            pair.expression_l.begin..pair.expression_l.end,
-                            MSG,
-                        );
+                        file.add_offense(COP_NAME, pair.expression_l, MSG);
                     } else {
                         keys.insert(key);
                     }
