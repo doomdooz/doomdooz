@@ -26,3 +26,12 @@ pub fn on_and(node: &types::Node, file: &source::File) {
         }
     }
 }
+
+mod tests {
+    #[test]
+    fn test_and_operations() {
+        crate::expect_offense!("true and false");
+
+        crate::expect_no_offense!("true && false");
+    }
+}
