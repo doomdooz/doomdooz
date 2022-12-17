@@ -1,4 +1,4 @@
-use doomdooz_lib::{cop, source, target_finder, TARGET_FILES};
+use doomdooz_lib::{cop, source, target_finder, CONFIG, TARGET_FILES};
 use rayon::prelude::*;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {

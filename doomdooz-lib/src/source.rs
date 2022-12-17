@@ -58,6 +58,8 @@ impl<'a> File<'a> {
     pub fn process(&self) {
         let ast = self.parser_result.ast.as_ref();
 
+        // dbg!(ast);
+
         if let Some(ast) = ast {
             self.iterate_nodes(&*ast);
             for (cop_name, handler) in TOKENS_HANLDERS.lock().unwrap().iter() {
@@ -105,6 +107,20 @@ impl<'a> File<'a> {
                 if let Some(body) = &n.value {
                     self.iterate_nodes(&body);
                 }
+            }
+            types::Node::Send(n) => {
+                let node_type = "send_".to_owned() + &n.method_name;
+                if let Some(handlers) = NODE_HANDLERS.lock().unwrap().get(node_type.as_str()) {
+                    for (cop_name, handler) in handlers {
+                        if self.is_enabled(cop_name) {
+                            handler(node, self);
+                        }
+                    }
+                }
+                // dbg!(n);
+                // if let Some(body) = &n.value {
+                //     self.iterate_nodes(&body);
+                // }
             }
             _ => (),
         }

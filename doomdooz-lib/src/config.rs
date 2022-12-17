@@ -37,6 +37,16 @@ impl Config {
         output
     }
 
+    pub fn get_string(&self, cop: &str, key: &str) -> String {
+        let cop_config = &self.0[&Yaml::String(cop.to_string())];
+
+        if let Yaml::String(value) = &cop_config[key] {
+            return value.clone();
+        } else {
+            panic!("Enabled field not found");
+        }
+    }
+
     pub fn is_enabled(&self, cop: &str) -> bool {
         let cop_config = &self.0[&Yaml::String(cop.to_string())];
         if let Yaml::Boolean(enabled) = &cop_config["Enabled"] {
