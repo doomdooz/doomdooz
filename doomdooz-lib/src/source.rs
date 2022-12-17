@@ -58,8 +58,6 @@ impl<'a> File<'a> {
     pub fn process(&self) {
         let ast = self.parser_result.ast.as_ref();
 
-        // dbg!(ast);
-
         if let Some(ast) = ast {
             self.iterate_nodes(&*ast);
             for (cop_name, handler) in TOKENS_HANLDERS.lock().unwrap().iter() {
@@ -80,6 +78,8 @@ impl<'a> File<'a> {
                 }
             }
         };
+
+        dbg!(&node.str_type());
 
         call_handlers(node.str_type());
 
