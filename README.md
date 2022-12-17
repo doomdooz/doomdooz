@@ -1,2 +1,2 @@
 
-inspired by https://github.com/charliermarsh/ruff
+Replace rubocop with doomdooz
