@@ -1,4 +1,4 @@
-use doomdooz_lib::{cop, source, target_finder, COPS, TARGET_FILES};
+use doomdooz_lib::{cop, source, COPS};
 use std::collections::HashSet;
 use wasm_bindgen::prelude::*;
 

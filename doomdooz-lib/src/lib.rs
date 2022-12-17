@@ -7,6 +7,7 @@ extern crate lazy_static;
 pub mod config;
 pub mod cop;
 pub mod source;
+pub mod target_finder;
 pub mod testing;
 pub mod types;
 
