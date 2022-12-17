@@ -79,8 +79,6 @@ impl<'a> File<'a> {
             }
         };
 
-        dbg!(&node.str_type());
-
         call_handlers(node.str_type());
 
         // TODO: implement all types
