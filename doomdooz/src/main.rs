@@ -1,19 +1,11 @@
-use std::time::Instant;
-
-use doomdooz_lib::{cop, source, target_finder, CONFIG};
+use doomdooz_lib::{cop, source, target_finder};
 use rayon::prelude::*;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     cop::init();
 
-    let now = Instant::now();
-
     // too slow
     let files = target_finder::scan();
-
-    let diff = now.elapsed();
-
-    println!("{:?}", diff);
 
     files
         .par_iter()
