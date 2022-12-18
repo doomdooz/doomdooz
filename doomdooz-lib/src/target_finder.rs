@@ -1,13 +1,15 @@
+use crate::types;
 use crate::CONFIG;
 use crate::COPS;
-use crate::TARGET_FILES;
 use globwalk;
+use std::collections::HashMap;
 use std::collections::HashSet;
 
-pub fn scan() {
+pub fn scan() -> types::TargetFilesMap {
     // TODO: there is a lot of space to optimize this function
     let cops = COPS.lock().unwrap();
-    let mut target_files = TARGET_FILES.lock().unwrap();
+
+    let mut target_files: types::TargetFilesMap = HashMap::new();
 
     for cop in cops.iter() {
         if CONFIG.is_enabled(cop) {
@@ -26,11 +28,13 @@ pub fn scan() {
                 .filter_map(Result::ok);
 
             for file in walker {
-                let entry = &mut target_files
+                let entry = target_files
                     .entry(file.path().display().to_string())
                     .or_insert(HashSet::new());
                 entry.insert(cop);
             }
         }
     }
+
+    target_files
 }
