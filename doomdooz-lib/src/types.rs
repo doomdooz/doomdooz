@@ -1,4 +1,5 @@
 use crate::source;
+pub use lib_ruby_parser::Lexer;
 pub use lib_ruby_parser::{
     source::DecodedInput, Bytes, Loc, Node, Parser, ParserOptions, ParserResult, Token,
 };

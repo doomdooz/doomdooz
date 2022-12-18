@@ -12,24 +12,16 @@ pub fn init() {
     cop::register(COP_NAME);
 }
 
-pub fn on_tokens(_tokens: &Vec<types::Token>, file: &source::File) {
+pub fn on_tokens(tokens: &Vec<types::Token>, file: &source::File) {
     let space = " ".as_bytes()[0];
-    let semicolon = ";".as_bytes()[0];
 
-    let mut space_seen = false;
-
-    for (location, byte) in file.parser_result.input.bytes.iter().enumerate() {
-        if *byte == semicolon && space_seen {
-            file.add_offense(
-                COP_NAME,
-                types::Loc {
-                    begin: location,
-                    end: location + 1,
-                },
-                MSG,
-            );
-        } else {
-            space_seen = *byte == space;
+    for token in tokens {
+        if token.token_name() == "tSEMI" {
+            if let Some(byte) = file.parser_result.input.bytes.get(token.loc.begin - 1) {
+                if *byte == space {
+                    file.add_offense(COP_NAME, token.loc, MSG);
+                }
+            }
         }
     }
 }
@@ -41,5 +33,7 @@ mod tests {
         crate::expect_offense!("x = 1 ; y = 2");
 
         crate::expect_no_offense!("x = 1; y = 2");
+
+        crate::expect_no_offense!("b = 'a ;'");
     }
 }
