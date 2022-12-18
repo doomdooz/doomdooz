@@ -1,4 +1,5 @@
 pub mod bundler;
+pub mod layout;
 pub mod lint;
 pub mod naming;
 pub mod style;
@@ -13,10 +14,11 @@ static INIT: Once = Once::new();
 
 pub fn init() {
     INIT.call_once(|| {
+        bundler::init();
+        layout::init();
+        lint::init();
         naming::init();
         style::init();
-        bundler::init();
-        lint::init();
     });
 }
 

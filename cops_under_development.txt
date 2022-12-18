@@ -12,13 +12,11 @@
      20 lib/rubocop/cop/mixin/target_ruby_version.rb
      21 lib/rubocop/cop/mixin/min_body_length.rb
      21 lib/rubocop/cop/mixin/string_literals_help.rb
-     22 lib/rubocop/cop/style/begin_block.rb
      23 lib/rubocop/cop/correctors/require_library_corrector.rb
      23 lib/rubocop/cop/correctors/string_literal_corrector.rb
      23 lib/rubocop/cop/mixin/match_range.rb
      23 lib/rubocop/cop/mixin/nil_methods.rb
      23 lib/rubocop/cop/variable_force/branchable.rb
-     24 lib/rubocop/cop/layout/space_before_semicolon.rb
      24 lib/rubocop/cop/mixin/configurable_max.rb
      25 lib/rubocop/cop/correctors/condition_corrector.rb
      25 lib/rubocop/cop/correctors/empty_line_corrector.rb
