@@ -8,7 +8,6 @@ static COP_NAME: &str = "Style/Alias";
 
 const MSG_ALIAS: &str = "Use `alias_method` instead of `alias`.";
 const MSG_ALIAS_METHOD: &str = "Use `alias` instead of `alias_method` %<current>s.";
-const MSG_SYMBOL_ARGS: &str = "Use `alias %<prefer>s` instead of `alias %<current>s`.";
 
 pub fn init() {
     register_node_handler("alias", COP_NAME, on_alias);
