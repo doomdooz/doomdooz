@@ -29,7 +29,6 @@
      27 lib/rubocop/cop/legacy/corrector.rb
      27 lib/rubocop/cop/mixin/safe_assignment.rb
      28 lib/rubocop/cop/internal_affairs.rb
-     28 lib/rubocop/cop/style/end_block.rb
      28 lib/rubocop/cop/style/symbol_literal.rb
      29 lib/rubocop/cop/layout/space_after_semicolon.rb
      29 lib/rubocop/cop/layout/space_before_comma.rb
