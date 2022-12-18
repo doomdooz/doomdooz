@@ -23,7 +23,6 @@ pub fn on_tokens(tokens: &Vec<types::Token>, file: &source::File) {
 
     for byte in &file.parser_result.input.bytes {
         if *byte == semicolon && space_seen {
-            dbg!("detected here");
             file.add_offense(
                 COP_NAME,
                 types::Loc {
@@ -37,12 +36,6 @@ pub fn on_tokens(tokens: &Vec<types::Token>, file: &source::File) {
         }
 
         location += 1;
-    }
-
-    for token in tokens {
-        if token.token_name() == "tSEMI" {
-            dbg!(&token);
-        }
     }
 }
 
