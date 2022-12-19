@@ -31,7 +31,6 @@
      28 lib/rubocop/cop/internal_affairs.rb
      28 lib/rubocop/cop/style/symbol_literal.rb
      29 lib/rubocop/cop/layout/space_after_semicolon.rb
-     29 lib/rubocop/cop/layout/space_before_comma.rb
      29 lib/rubocop/cop/mixin/unused_argument.rb
      29 lib/rubocop/cop/style/send.rb
      30 lib/rubocop/cop/mixin/gemspec_help.rb
