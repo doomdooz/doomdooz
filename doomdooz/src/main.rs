@@ -1,8 +1,15 @@
-use doomdooz_lib::{cop, source, target_finder};
+use doomdooz_lib::{cop, source, target_finder, COPS};
 use rayon::prelude::*;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     cop::init();
+
+    {
+        println!(
+            "there are {} cops implemented so far",
+            COPS.lock().unwrap().len()
+        );
+    }
 
     // too slow
     let files = target_finder::scan();
