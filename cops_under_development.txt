@@ -39,7 +39,6 @@
      32 lib/rubocop/cop/layout/space_after_comma.rb
      32 lib/rubocop/cop/mixin/percent_literal.rb
      33 lib/rubocop/cop/layout/first_hash_element_line_break.rb
-     33 lib/rubocop/cop/lint/empty_interpolation.rb
      33 lib/rubocop/cop/mixin/multiline_element_line_breaks.rb
      33 lib/rubocop/cop/security/eval.rb
      34 lib/rubocop/cop/internal_affairs/inherit_deprecated_cop_class.rb
