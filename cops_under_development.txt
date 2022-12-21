@@ -66,7 +66,6 @@
      39 lib/rubocop/cop/lint/duplicate_elsif_condition.rb
      39 lib/rubocop/cop/lint/syntax.rb
      39 lib/rubocop/cop/security/marshal_load.rb
-     39 lib/rubocop/cop/style/array_join.rb
      40 lib/rubocop/cop/correctors/unused_arg_corrector.rb
      40 lib/rubocop/cop/layout/empty_lines_around_block_body.rb
      40 lib/rubocop/cop/lint/or_assignment_to_constant.rb
