@@ -1,5 +1,6 @@
 [package]
 name = "doomdooz"
+description = "Ruby linter executable implementing all rubocop features"
 version = "0.1.0"
 edition = "2021"
 
