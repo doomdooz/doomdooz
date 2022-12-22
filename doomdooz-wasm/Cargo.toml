@@ -3,6 +3,7 @@ name = "doomdooz-wasm"
 description = "Ruby linter in webassembly implementing all rubocop features"
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
 
 [lib]
 crate-type = ["cdylib"]
