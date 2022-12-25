@@ -1,2 +1,3 @@
+## installation
 
-Replace rubocop with doomdooz
+```cargo install doomdooz```
