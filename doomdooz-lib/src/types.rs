@@ -1,7 +1,6 @@
 use crate::source;
-pub use lib_ruby_parser::Lexer;
 pub use lib_ruby_parser::{
-    source::DecodedInput, Bytes, Loc, Node, Parser, ParserOptions, ParserResult, Token,
+    source::DecodedInput, Bytes, Lexer, Loc, Node, Parser, ParserOptions, ParserResult, Token,
 };
 use std::collections::HashMap;
 use std::collections::HashSet;

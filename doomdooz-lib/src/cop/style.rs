@@ -5,6 +5,7 @@ pub mod begin_block;
 pub mod empty_method;
 pub mod end_block;
 pub mod send;
+pub mod strip;
 pub mod symbol_literal;
 
 pub fn init() {
@@ -15,5 +16,6 @@ pub fn init() {
     empty_method::init();
     end_block::init();
     send::init();
+    strip::init();
     symbol_literal::init();
 }
