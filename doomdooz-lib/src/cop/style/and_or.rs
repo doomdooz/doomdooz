@@ -15,14 +15,10 @@ pub fn init() {
 
 pub fn on_and(node: &types::Node, file: &source::File) {
     if let types::Node::And(node) = node {
-        let operator = str::from_utf8(
-            &file.parser_result.input.bytes[node.operator_l.begin..node.operator_l.end],
-        );
+        let operator = file.source(node.operator_l);
 
-        if let Ok(operator) = operator {
-            if operator == "and" {
-                file.add_offense(COP_NAME, node.operator_l, MSG);
-            }
+        if operator == "and" {
+            file.add_offense(COP_NAME, node.operator_l, MSG);
         }
     }
 }

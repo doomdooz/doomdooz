@@ -18,10 +18,7 @@ pub fn on_sym(node: &types::Node, file: &source::File) {
     let re = Regex::new(r#"\A:["'][A-Za-z_]\w*["']\z"#).unwrap();
 
     if let types::Node::Sym(node) = node {
-        let literal = str::from_utf8(
-            &file.parser_result.input.bytes[node.expression_l.begin..node.expression_l.end],
-        )
-        .unwrap();
+        let literal = &file.source(node.expression_l);
 
         if re.is_match(literal) {
             file.add_offense(COP_NAME, node.expression_l, MSG);
