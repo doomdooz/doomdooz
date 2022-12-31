@@ -27,7 +27,6 @@ lib/rubocop/cop/mixin/gemspec_help.rb
 lib/rubocop/cop/mixin/method_preference.rb
 lib/rubocop/cop/mixin/rescue_node.rb
 lib/rubocop/cop/lint/regexp_as_condition.rb
-lib/rubocop/cop/layout/space_after_comma.rb
 lib/rubocop/cop/mixin/percent_literal.rb
 lib/rubocop/cop/layout/first_hash_element_line_break.rb
 lib/rubocop/cop/mixin/multiline_element_line_breaks.rb
