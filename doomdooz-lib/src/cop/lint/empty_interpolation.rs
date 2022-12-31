@@ -29,7 +29,7 @@ mod tests {
     #[test]
     fn it_works() {
         crate::expect_no_offense!(" \"something #{a}");
-        crate::expect_offense2! {"
+        crate::expect_offense! {"
             \"something #{}
                        ^^^
         "};

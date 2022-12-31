@@ -30,7 +30,7 @@ pub fn on_tokens(tokens: &Vec<types::Token>, file: &source::File) {
 mod tests {
     #[test]
     fn it_works() {
-        crate::expect_offense2! {"
+        crate::expect_offense! {"
             [1 , 2]
                ^
         "};

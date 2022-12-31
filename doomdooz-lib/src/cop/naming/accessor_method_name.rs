@@ -35,7 +35,7 @@ pub fn on_def(node: &types::Node, file: &source::File) {
 mod tests {
     #[test]
     fn it_detects_get_attribute() {
-        crate::expect_offense2! {"
+        crate::expect_offense! {"
             def get_attribute
                 ^^^^^^^^^^^^^
             end
@@ -44,7 +44,7 @@ mod tests {
 
     #[test]
     fn it_detects_set_attribute() {
-        crate::expect_offense2! {"
+        crate::expect_offense! {"
             def set_attribute(aa)
                 ^^^^^^^^^^^^^
             end

@@ -51,7 +51,7 @@ mod tests {
 
     #[test]
     fn non_ascii_variable_identifier() {
-        crate::expect_offense2! {"
+        crate::expect_offense! {"
             foo∂∂bar = 'aa'
                ^^^^^^
         "};

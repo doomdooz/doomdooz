@@ -34,7 +34,7 @@ pub fn on_lstrip_rstrip(node: &types::Node, file: &source::File) {
 mod tests {
     #[test]
     fn strip_works() {
-        crate::expect_offense2! {"
+        crate::expect_offense! {"
             'str'.lstrip.rstrip
                   ^^^^^^^^^^^^^
             " };

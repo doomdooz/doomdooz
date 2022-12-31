@@ -37,7 +37,7 @@ pub fn on_def(node: &types::Node, file: &source::File) {
 mod tests {
     #[test]
     fn it_works() {
-        crate::expect_offense2! {"
+        crate::expect_offense! {"
             def name
                 ^^^^
             end

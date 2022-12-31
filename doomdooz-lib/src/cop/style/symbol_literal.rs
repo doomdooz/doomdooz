@@ -33,7 +33,7 @@ pub fn on_sym(node: &types::Node, file: &source::File) {
 mod tests {
     #[test]
     fn it_works() {
-        crate::expect_offense2! {"
+        crate::expect_offense! {"
             :\"name\"
             ^^^^^^^
         "};
