@@ -52,7 +52,6 @@ lib/rubocop/cop/lint/uri_regexp.rb
 lib/rubocop/cop/mixin/string_help.rb
 lib/rubocop/cop/documentation.rb
 lib/rubocop/cop/layout/space_after_method_name.rb
-lib/rubocop/cop/layout/space_after_not.rb
 lib/rubocop/cop/lint/duplicate_elsif_condition.rb
 lib/rubocop/cop/lint/syntax.rb
 lib/rubocop/cop/security/marshal_load.rb
