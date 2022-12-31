@@ -1,6 +1,7 @@
 use crate::types;
 use crate::NODE_HANDLERS;
 use crate::TOKENS_HANLDERS;
+use std::cell::RefCell;
 use std::collections::HashSet;
 use std::fs;
 use std::str;
@@ -29,7 +30,7 @@ impl<'a> File<'a> {
             parser_result: parser_result,
             active_cops: active_cops,
             offenses: Mutex::new(vec![]),
-            offenses2: vec![],
+            offenses2: RefCell::new(vec![]),
         }
     }
 
@@ -49,7 +50,7 @@ impl<'a> File<'a> {
             parser_result: parser_result,
             active_cops: active_cops,
             offenses: Mutex::new(vec![]),
-            offenses2: vec![],
+            offenses2: RefCell::new(vec![]),
         }
     }
 
@@ -152,6 +153,18 @@ impl<'a> File<'a> {
         );
 
         self.offenses.lock().unwrap().push(msg);
+
+        let offense = types::Offense {
+            filepath: self.filepath.clone(),
+            line: line + 1,
+            col_begin: col + 1,
+            col_end: col_end + 1,
+            message: message.to_string(),
+            line_string: str::from_utf8(line_string).unwrap().to_string(),
+            cop_name: cop_name.to_owned(),
+        };
+
+        self.offenses2.borrow_mut().push(offense);
     }
 
     pub fn print_report(&self) {
@@ -160,6 +173,13 @@ impl<'a> File<'a> {
             .unwrap()
             .iter()
             .for_each(|x| println!("{x}"));
+    }
+
+    pub fn print_report2(&self) {
+        self.offenses2
+            .borrow()
+            .iter()
+            .for_each(|x| println!("{}", x.to_string()));
     }
 
     pub fn report(&self) -> String {

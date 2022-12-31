@@ -19,7 +19,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .map(|(filepath, active_cops)| {
             let file = source::File::new(filepath.clone(), active_cops);
             file.process();
-            file.print_report();
+            file.print_report2();
         })
         .count();
 

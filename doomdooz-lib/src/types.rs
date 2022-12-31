@@ -2,12 +2,13 @@ use crate::source;
 pub use lib_ruby_parser::{
     source::DecodedInput, Bytes, Lexer, Loc, Node, Parser, ParserOptions, ParserResult, Token,
 };
+use std::cell::RefCell;
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::sync::Mutex;
 
 pub type OffenseList = Mutex<Vec<String>>;
-pub type OffenseList2 = Vec<Offense>;
+pub type OffenseList2 = RefCell<Vec<Offense>>;
 pub type NodeHandler = fn(&Node, &source::File);
 pub type TokensHandler = fn(&Vec<Token>, &source::File);
 pub type NodeHandlersMap = Mutex<HashMap<&'static str, Vec<(&'static str, NodeHandler)>>>;
@@ -24,7 +25,7 @@ pub struct Offense {
 }
 
 impl Offense {
-    fn to_string(&self) -> String {
+    pub fn to_string(&self) -> String {
         let annotation = format!(
             "{}{}",
             " ".repeat(self.col_begin - 1),
@@ -32,7 +33,7 @@ impl Offense {
         );
 
         format!(
-            "{}:{}:{}: {} {}\n{}\n{}\n",
+            "{}:{}:{}: {} {}\n{}{}\n",
             self.filepath,
             self.line,
             self.col_begin,
@@ -56,7 +57,7 @@ mod tests {
             col_begin: 3,
             col_end: 15,
             message: "Something".to_owned(),
-            line_string: "  def something".to_owned(),
+            line_string: "  def something\n".to_owned(),
             cop_name: "Style/Test".to_owned(),
         };
 
