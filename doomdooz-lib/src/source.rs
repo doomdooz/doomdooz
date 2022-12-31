@@ -166,6 +166,17 @@ impl<'a> File<'a> {
         output
     }
 
+    pub fn test_report(&self) -> String {
+        let mut output = String::new();
+
+        self.offenses
+            .borrow()
+            .iter()
+            .for_each(|x| output.push_str(&&x.test_report()));
+
+        output
+    }
+
     pub fn total_offenses(&self) -> usize {
         self.offenses.borrow().len()
     }

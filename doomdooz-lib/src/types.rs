@@ -43,6 +43,16 @@ impl Offense {
             annotation
         )
     }
+
+    pub fn test_report(&self) -> String {
+        let annotation = format!(
+            "{}{}",
+            " ".repeat(self.col_begin - 1),
+            "^".repeat(self.col_end - self.col_begin)
+        );
+
+        format!("{}\n{}", self.line_string, annotation)
+    }
 }
 
 #[cfg(test)]
