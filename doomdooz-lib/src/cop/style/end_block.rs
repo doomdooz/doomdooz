@@ -22,10 +22,9 @@ pub fn on_postexe(node: &types::Node, file: &source::File) {
 mod tests {
     #[test]
     fn it_works() {
-        crate::expect_offense!(
-            "
+        crate::expect_offense2! {"
             END { test }
-        "
-        );
+            ^^^
+        "};
     }
 }

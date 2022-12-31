@@ -30,7 +30,10 @@ pub fn on_tokens(tokens: &Vec<types::Token>, file: &source::File) {
 mod tests {
     #[test]
     fn it_works() {
-        crate::expect_offense!("x = 1 ; y = 2");
+        crate::expect_offense2! {"
+            x = 1 ; y = 2
+                  ^
+        "};
 
         crate::expect_no_offense!("x = 1; y = 2");
 

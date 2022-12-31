@@ -51,7 +51,7 @@ impl Offense {
             "^".repeat(self.col_end - self.col_begin)
         );
 
-        format!("{}\n{}", self.line_string, annotation)
+        format!("{}\n{}", self.line_string.trim_end(), annotation)
     }
 }
 

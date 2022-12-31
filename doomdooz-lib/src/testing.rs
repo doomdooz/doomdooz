@@ -24,9 +24,6 @@ macro_rules! expect_offense2 {
 
         file.process();
 
-        dbg!(&source_lines);
-        dbg!(&annotation_lines);
-
         assert_eq!(file.test_report(), annotation_lines.join("\n"));
     };
 }

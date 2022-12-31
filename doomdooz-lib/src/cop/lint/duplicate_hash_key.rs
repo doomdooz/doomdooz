@@ -46,6 +46,9 @@ mod tests {
 
     #[test]
     fn it_detects_offense() {
-        crate::expect_offense!("hash = { name: 'mohsen', name: 'other' }");
+        crate::expect_offense2! {"
+            hash = { name: 'mohsen', name: 'other' }
+                                     ^^^^^^^^^^^^^
+        "};
     }
 }

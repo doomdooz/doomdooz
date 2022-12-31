@@ -54,11 +54,10 @@ pub fn on_send(node: &types::Node, file: &source::File) {
 mod tests {
     #[test]
     fn it_detects_offenses() {
-        crate::expect_offense!(
-            "
+        crate::expect_offense2! {"
             gem 'rails'
             gem 'rails'
-        "
-        );
+                ^^^^^^^
+        "};
     }
 }

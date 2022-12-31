@@ -33,7 +33,10 @@ pub fn on_def(node: &types::Node, file: &source::File) {
 mod tests {
     #[test]
     fn it_works() {
-        crate::expect_offense!("['a', 'b'] * ','");
+        crate::expect_offense2! {"
+            ['a', 'b'] * ','
+                       ^
+        "};
 
         crate::expect_no_offense!("['a', 'b'] * 2");
     }
