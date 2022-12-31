@@ -9,6 +9,7 @@ use std::sync::Mutex;
 pub struct File<'a> {
     filepath: String,
     offenses: types::OffenseList,
+    offenses2: types::OffenseList2,
     active_cops: &'a HashSet<&'a str>,
     pub parser_result: types::ParserResult,
 }
@@ -28,6 +29,7 @@ impl<'a> File<'a> {
             parser_result: parser_result,
             active_cops: active_cops,
             offenses: Mutex::new(vec![]),
+            offenses2: vec![],
         }
     }
 
@@ -47,6 +49,7 @@ impl<'a> File<'a> {
             parser_result: parser_result,
             active_cops: active_cops,
             offenses: Mutex::new(vec![]),
+            offenses2: vec![],
         }
     }
 

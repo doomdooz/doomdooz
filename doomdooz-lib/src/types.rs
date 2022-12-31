@@ -7,6 +7,7 @@ use std::collections::HashSet;
 use std::sync::Mutex;
 
 pub type OffenseList = Mutex<Vec<String>>;
+pub type OffenseList2 = Vec<Offense>;
 pub type NodeHandler = fn(&Node, &source::File);
 pub type TokensHandler = fn(&Vec<Token>, &source::File);
 pub type NodeHandlersMap = Mutex<HashMap<&'static str, Vec<(&'static str, NodeHandler)>>>;
