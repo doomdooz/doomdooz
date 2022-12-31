@@ -114,6 +114,15 @@ impl<'a> File<'a> {
         }
     }
 
+    pub fn source(&self, loc: types::Loc) -> String {
+        // let bytes = self.input.substr_at(loc.begin, loc.end).unwrap();
+        // String::from_utf8_lossy(bytes).into_owned()
+
+        str::from_utf8(&self.parser_result.input.bytes[loc.begin..loc.end])
+            .unwrap()
+            .to_string()
+    }
+
     pub fn add_offense<T: AsRef<str> + std::fmt::Display>(
         &self,
         cop_name: &'static str,
