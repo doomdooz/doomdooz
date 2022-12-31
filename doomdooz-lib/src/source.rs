@@ -5,12 +5,10 @@ use std::cell::RefCell;
 use std::collections::HashSet;
 use std::fs;
 use std::str;
-use std::sync::Mutex;
 
 pub struct File<'a> {
     filepath: String,
-    offenses: types::OffenseList,
-    offenses2: types::OffenseList2,
+    offenses: types::OffenseList2,
     active_cops: &'a HashSet<&'a str>,
     pub parser_result: types::ParserResult,
 }
@@ -29,8 +27,7 @@ impl<'a> File<'a> {
             filepath: "".to_string(),
             parser_result: parser_result,
             active_cops: active_cops,
-            offenses: Mutex::new(vec![]),
-            offenses2: RefCell::new(vec![]),
+            offenses: RefCell::new(vec![]),
         }
     }
 
@@ -49,8 +46,7 @@ impl<'a> File<'a> {
             filepath: filepath,
             parser_result: parser_result,
             active_cops: active_cops,
-            offenses: Mutex::new(vec![]),
-            offenses2: RefCell::new(vec![]),
+            offenses: RefCell::new(vec![]),
         }
     }
 
@@ -139,21 +135,6 @@ impl<'a> File<'a> {
             .line_col_for_pos(range.end)
             .unwrap();
 
-        let annotation = format!("{}{}", " ".repeat(col), "^".repeat(col_end - col));
-
-        let msg = format!(
-            "{}:{}:{}: {} {}\n{}{}",
-            self.filepath,
-            line + 1,
-            col + 1,
-            cop_name,
-            message,
-            str::from_utf8(line_string).unwrap(),
-            annotation
-        );
-
-        self.offenses.lock().unwrap().push(msg);
-
         let offense = types::Offense {
             filepath: self.filepath.clone(),
             line: line + 1,
@@ -164,19 +145,11 @@ impl<'a> File<'a> {
             cop_name: cop_name.to_owned(),
         };
 
-        self.offenses2.borrow_mut().push(offense);
+        self.offenses.borrow_mut().push(offense);
     }
 
     pub fn print_report(&self) {
         self.offenses
-            .lock()
-            .unwrap()
-            .iter()
-            .for_each(|x| println!("{x}"));
-    }
-
-    pub fn print_report2(&self) {
-        self.offenses2
             .borrow()
             .iter()
             .for_each(|x| println!("{}", x.to_string()));
@@ -186,15 +159,14 @@ impl<'a> File<'a> {
         let mut output = String::new();
 
         self.offenses
-            .lock()
-            .unwrap()
+            .borrow()
             .iter()
-            .for_each(|x| output.push_str(x));
+            .for_each(|x| output.push_str(&x.to_string()));
 
         output
     }
 
     pub fn total_offenses(&self) -> usize {
-        self.offenses.lock().unwrap().len()
+        self.offenses.borrow().len()
     }
 }
