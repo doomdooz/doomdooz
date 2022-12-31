@@ -4,6 +4,9 @@ use std::sync::Mutex;
 #[macro_use]
 extern crate lazy_static;
 
+#[macro_use]
+extern crate indoc;
+
 pub mod config;
 pub mod cop;
 pub mod source;
