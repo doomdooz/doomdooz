@@ -37,7 +37,7 @@ mod tests {
     fn it_detects_get_attribute() {
         crate::expect_offense! {"
             def get_attribute
-                ^^^^^^^^^^^^^
+                ^^^^^^^^^^^^^ Do not prefix reader method names with `get_`.
             end
         "};
     }
@@ -46,7 +46,7 @@ mod tests {
     fn it_detects_set_attribute() {
         crate::expect_offense! {"
             def set_attribute(aa)
-                ^^^^^^^^^^^^^
+                ^^^^^^^^^^^^^ Do not prefix writer method names with `set_`.
             end
         "};
     }

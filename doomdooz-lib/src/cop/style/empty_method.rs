@@ -39,7 +39,7 @@ mod tests {
     fn it_works() {
         crate::expect_offense! {"
             def name
-                ^^^^
+                ^^^^ Put empty method definitions on a single line.
             end
         "};
     }

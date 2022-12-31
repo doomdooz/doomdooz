@@ -32,7 +32,7 @@ mod tests {
     fn it_works() {
         crate::expect_offense! {"
             [1 , 2]
-               ^
+               ^ Space found before comma.
         "};
 
         crate::expect_no_offense!("[1, 2]");

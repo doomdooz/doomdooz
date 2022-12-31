@@ -35,7 +35,7 @@ mod tests {
     fn it_works() {
         crate::expect_offense! {"
             ['a', 'b'] * ','
-                       ^
+                       ^ Favor `Array#join` over `Array#*`.
         "};
 
         crate::expect_no_offense!("['a', 'b'] * 2");

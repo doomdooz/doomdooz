@@ -48,7 +48,7 @@ mod tests {
     fn it_detects_offense() {
         crate::expect_offense! {"
             hash = { name: 'mohsen', name: 'other' }
-                                     ^^^^^^^^^^^^^
+                                     ^^^^^^^^^^^^^ Duplicated key in hash literal.
         "};
     }
 }

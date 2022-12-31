@@ -32,7 +32,7 @@ mod tests {
     fn it_works() {
         crate::expect_offense! {"
             :\"name\"
-            ^^^^^^^
+            ^^^^^^^ Do not use strings for word-like symbol literals.
         "};
 
         crate::expect_no_offense!(":\"full name\"");

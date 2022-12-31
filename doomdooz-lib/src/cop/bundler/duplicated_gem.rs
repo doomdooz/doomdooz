@@ -57,7 +57,7 @@ mod tests {
         crate::expect_offense! {"
             gem 'rails'
             gem 'rails'
-                ^^^^^^^
+                ^^^^^^^ Gem `rails` requirements already given on line 1 of the Gemfile.
         "};
     }
 }

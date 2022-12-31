@@ -32,7 +32,7 @@ mod tests {
     fn it_works() {
         crate::expect_offense! {"
             x = 1 ; y = 2
-                  ^
+                  ^ Space found before semicolon.
         "};
 
         crate::expect_no_offense!("x = 1; y = 2");

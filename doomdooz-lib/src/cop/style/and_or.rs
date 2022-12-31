@@ -28,7 +28,7 @@ mod tests {
     fn test_and_operations() {
         crate::expect_offense! {"
             true and false
-                 ^^^
+                 ^^^ Use `&&` instead of `and`.
         "};
 
         crate::expect_no_offense!("true && false");

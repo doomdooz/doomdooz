@@ -24,7 +24,7 @@ mod tests {
     fn it_works() {
         crate::expect_offense! {"
             BEGIN { test }
-            ^^^^^
+            ^^^^^ Avoid the use of `BEGIN` blocks.
         "};
     }
 }

@@ -53,7 +53,7 @@ mod tests {
     fn non_ascii_variable_identifier() {
         crate::expect_offense! {"
             foo∂∂bar = 'aa'
-               ^^^^^^
+               ^^^^^^ Use only ascii symbols in identifiers.
         "};
     }
 }

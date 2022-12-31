@@ -46,9 +46,10 @@ impl Offense {
 
     pub fn test_report(&self) -> String {
         let annotation = format!(
-            "{}{}",
+            "{}{} {}",
             " ".repeat(self.col_begin - 1),
-            "^".repeat(self.col_end - self.col_begin)
+            "^".repeat(self.col_end - self.col_begin),
+            self.message
         );
 
         format!("{}\n{}", self.line_string.trim_end(), annotation)

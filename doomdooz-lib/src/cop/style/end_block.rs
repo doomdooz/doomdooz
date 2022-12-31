@@ -24,7 +24,7 @@ mod tests {
     fn it_works() {
         crate::expect_offense! {"
             END { test }
-            ^^^
+            ^^^ Avoid the use of `END` blocks. Use `Kernel#at_exit` instead.
         "};
     }
 }

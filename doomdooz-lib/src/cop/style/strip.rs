@@ -3,7 +3,7 @@ use crate::cop::register_node_handler;
 use crate::source;
 use crate::types;
 
-static MSG: &str = "Use `strip` instead of `%<methods>s`.";
+static MSG: &str = "Use `strip` instead of `lstrip.rstrip`.";
 static COP_NAME: &str = "Style/Strip";
 
 pub fn init() {
@@ -21,7 +21,6 @@ pub fn on_lstrip_rstrip(node: &types::Node, file: &source::File) {
                         let mut loc = node.selector_l.unwrap();
                         loc.begin = recv.selector_l.unwrap().begin;
 
-                        // dbg!(&node);
                         file.add_offense(COP_NAME, loc, MSG);
                     }
                 }
@@ -36,7 +35,7 @@ mod tests {
     fn strip_works() {
         crate::expect_offense! {"
             'str'.lstrip.rstrip
-                  ^^^^^^^^^^^^^
+                  ^^^^^^^^^^^^^ Use `strip` instead of `lstrip.rstrip`.
             " };
     }
 }

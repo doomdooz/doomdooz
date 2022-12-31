@@ -31,7 +31,7 @@ mod tests {
         crate::expect_no_offense!(" \"something #{a}");
         crate::expect_offense! {"
             \"something #{}
-                       ^^^
+                       ^^^ Empty interpolation detected.
         "};
     }
 }
