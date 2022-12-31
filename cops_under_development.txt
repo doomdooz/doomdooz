@@ -22,7 +22,6 @@ lib/rubocop/cop/exclude_limit.rb
 lib/rubocop/cop/mixin/def_node.rb
 lib/rubocop/cop/mixin/safe_assignment.rb
 lib/rubocop/cop/internal_affairs.rb
-lib/rubocop/cop/layout/space_after_semicolon.rb
 lib/rubocop/cop/mixin/unused_argument.rb
 lib/rubocop/cop/mixin/gemspec_help.rb
 lib/rubocop/cop/mixin/method_preference.rb
