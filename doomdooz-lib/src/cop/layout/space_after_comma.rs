@@ -18,7 +18,6 @@ pub fn on_tokens(tokens: &Vec<types::Token>, file: &source::File) {
     for token in tokens {
         if token.token_name() == "tCOMMA" {
             if let Some(byte) = file.parser_result.input.bytes.get(token.loc.begin + 1) {
-                dbg!(*byte);
                 if *byte != space {
                     file.add_offense(COP_NAME, token.loc, MSG);
                 }
