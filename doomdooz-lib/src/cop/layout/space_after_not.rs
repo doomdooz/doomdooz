@@ -16,8 +16,6 @@ pub fn on_tokens(tokens: &Vec<types::Token>, file: &source::File) {
     let space = " ".as_bytes()[0];
 
     for token in tokens {
-        dbg!(token.token_name());
-
         if token.token_name() == "tBANG" {
             if let Some(byte) = file.parser_result.input.bytes.get(token.loc.begin + 1) {
                 if *byte == space {
