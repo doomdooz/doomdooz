@@ -1,0 +1,9 @@
+{% for mod in submodules %}
+pub mod {{ mod }};
+{% endfor %}
+
+pub fn init() {
+{% for mod in submodules %}
+  {{ mod }}::init();
+{% endfor %}
+}
