@@ -13,12 +13,12 @@ pub fn init() {
 }
 
 pub fn on_tokens(tokens: &Vec<types::Token>, file: &source::File) {
-    let space = " ".as_bytes()[0];
+    let valid_list = [b' ', b'\n', b')', b'}'];
 
     for token in tokens {
         if token.token_name() == "tCOMMA" {
             if let Some(byte) = file.parser_result.input.bytes.get(token.loc.begin + 1) {
-                if *byte != space {
+                if !valid_list.contains(byte) {
                     file.add_offense(COP_NAME, token.loc, MSG);
                 }
             }
