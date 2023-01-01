@@ -15,6 +15,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let matches = command!() // requires `cargo` feature
         .arg(Arg::new("file").action(ArgAction::Append))
+        .arg(
+            Arg::new("list-target-files")
+                .short('L')
+                .long("list-target-files")
+                .action(ArgAction::SetTrue),
+        )
         .get_matches();
 
     let files = matches
@@ -23,10 +29,21 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .map(|v| v.as_str())
         .collect::<Vec<_>>();
 
+    if matches.get_flag("list-target-files") {
+        print_target_files();
+        return Ok(());
+    }
+
     if files.len() > 0 {
         panic!("passing files as argument is not supported yet");
     }
 
+    run();
+
+    Ok(())
+}
+
+fn run() {
     // too slow
     let files = target_finder::scan();
 
@@ -38,6 +55,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             file.print_report();
         })
         .count();
+}
 
-    Ok(())
+fn print_target_files() {
+    for (filepath, _) in target_finder::scan() {
+        println!("{}", filepath.strip_prefix("./").unwrap());
+    }
 }
