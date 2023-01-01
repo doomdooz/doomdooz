@@ -1,4 +1,4 @@
-use doomdooz_lib::{cop, source, target_finder, COPS};
+use doomdooz_lib::{cop, source, target_finder, CONFIG, COPS};
 use rayon::prelude::*;
 
 use clap::{command, Arg, ArgAction};
@@ -6,19 +6,17 @@ use clap::{command, Arg, ArgAction};
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     cop::init();
 
-    {
-        println!(
-            "there are {} cops implemented so far",
-            COPS.lock().unwrap().len()
-        );
-    }
-
     let matches = command!() // requires `cargo` feature
         .arg(Arg::new("file").action(ArgAction::Append))
         .arg(
             Arg::new("list-target-files")
                 .short('L')
                 .long("list-target-files")
+                .action(ArgAction::SetTrue),
+        )
+        .arg(
+            Arg::new("show-cops")
+                .long("show-cops")
                 .action(ArgAction::SetTrue),
         )
         .get_matches();
@@ -31,6 +29,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     if matches.get_flag("list-target-files") {
         print_target_files();
+        return Ok(());
+    }
+
+    if matches.get_flag("show-cops") {
+        show_cops();
         return Ok(());
     }
 
@@ -55,6 +58,12 @@ fn run() {
             file.print_report();
         })
         .count();
+}
+
+fn show_cops() {
+    for cop in COPS.lock().unwrap().iter() {
+        println!("{}\t\t{}", cop, CONFIG.get_string(cop, "Description"));
+    }
 }
 
 fn print_target_files() {

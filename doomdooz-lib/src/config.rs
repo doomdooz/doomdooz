@@ -1,6 +1,7 @@
 use merge_yaml_hash::MergeYamlHash;
 use yaml_rust::yaml::Hash;
 use yaml_rust::yaml::Yaml;
+use yaml_rust::YamlEmitter;
 
 pub struct Config(Hash);
 
@@ -35,6 +36,16 @@ impl Config {
         }
 
         output
+    }
+
+    pub fn get_raw(&self, cop: &str) -> String {
+        let mut out = String::new();
+
+        let raw = &self.0[&Yaml::String(cop.to_string())];
+        let mut emitter = YamlEmitter::new(&mut out);
+        emitter.dump(raw).unwrap();
+
+        out
     }
 
     pub fn get_string(&self, cop: &str, key: &str) -> String {
