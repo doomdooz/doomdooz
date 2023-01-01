@@ -33,7 +33,6 @@ lib/rubocop/cop/mixin/multiline_element_line_breaks.rb
 lib/rubocop/cop/security/eval.rb
 lib/rubocop/cop/internal_affairs/inherit_deprecated_cop_class.rb
 lib/rubocop/cop/layout/space_before_comment.rb
-lib/rubocop/cop/lint/float_out_of_range.rb
 lib/rubocop/cop/lint/top_level_return_with_argument.rb
 lib/rubocop/cop/mixin/negative_conditional.rb
 lib/rubocop/cop/style/implicit_runtime_error.rb
