@@ -1,3 +1,7 @@
 /target
 
+doomdooz-lib/src/cop/bundler.rs
+doomdooz-lib/src/cop/layout.rs
+doomdooz-lib/src/cop/lint.rs
+doomdooz-lib/src/cop/naming.rs
 doomdooz-lib/src/cop/style.rs
