@@ -16,6 +16,10 @@ merge-yaml-hash = "0.2.0"
 globwalk = "0.8.1"
 indoc = "1.0.8"
 
+[build-dependencies]
+tera = "1"
+globwalk = "0.8.1"
+
 [profile.release]
 opt-level = 'z'
 lto = true
