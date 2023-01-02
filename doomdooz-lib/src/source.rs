@@ -194,6 +194,10 @@ impl<'a> File<'a> {
         self.offenses.borrow().len()
     }
 
+    pub fn save_corrected(&self) {
+        fs::write(&self.filepath, self.corrected()).unwrap();
+    }
+
     pub fn corrected(&self) -> String {
         let mut source_index: usize = 0;
         let mut correction_index: usize = 0;
@@ -217,7 +221,6 @@ impl<'a> File<'a> {
             }
         }
 
-        dbg!(&self.corrections);
         output
     }
 }

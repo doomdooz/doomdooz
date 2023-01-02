@@ -1,7 +1,6 @@
+use clap::{command, Arg, ArgAction};
 use doomdooz_lib::{cop, source, target_finder, CONFIG, COPS};
 use rayon::prelude::*;
-
-use clap::{command, Arg, ArgAction};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     cop::init();
@@ -12,6 +11,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             Arg::new("list-target-files")
                 .short('L')
                 .long("list-target-files")
+                .action(ArgAction::SetTrue),
+        )
+        .arg(
+            Arg::new("autocorrect")
+                .short('a')
+                .long("autocorrect")
                 .action(ArgAction::SetTrue),
         )
         .arg(
@@ -41,12 +46,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         panic!("passing files as argument is not supported yet");
     }
 
-    run();
+    run(matches.get_flag("autocorrect"));
 
     Ok(())
 }
 
-fn run() {
+fn run(correction: bool) {
     // too slow
     let files = target_finder::scan();
 
@@ -56,6 +61,10 @@ fn run() {
             let file = source::File::new(filepath.clone(), active_cops);
             file.process();
             file.print_report();
+
+            if correction {
+                file.save_corrected();
+            }
         })
         .count();
 }
