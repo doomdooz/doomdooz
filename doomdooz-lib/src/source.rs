@@ -10,6 +10,7 @@ pub struct File<'a> {
     filepath: String,
     offenses: types::OffenseList2,
     active_cops: &'a HashSet<&'a str>,
+    corrections: RefCell<Vec<types::Correction>>,
     pub parser_result: types::ParserResult,
 }
 
@@ -27,6 +28,7 @@ impl<'a> File<'a> {
             filepath: "".to_string(),
             parser_result: parser_result,
             active_cops: active_cops,
+            corrections: RefCell::new(vec![]),
             offenses: RefCell::new(vec![]),
         }
     }
@@ -46,6 +48,7 @@ impl<'a> File<'a> {
             filepath: filepath,
             parser_result: parser_result,
             active_cops: active_cops,
+            corrections: RefCell::new(vec![]),
             offenses: RefCell::new(vec![]),
         }
     }
@@ -120,6 +123,10 @@ impl<'a> File<'a> {
             .to_string()
     }
 
+    pub fn add_correction(&self, correction: types::Correction) {
+        self.corrections.borrow_mut().push(correction);
+    }
+
     pub fn add_offense<T: AsRef<str> + std::fmt::Display>(
         &self,
         cop_name: &'static str,
@@ -185,5 +192,32 @@ impl<'a> File<'a> {
 
     pub fn total_offenses(&self) -> usize {
         self.offenses.borrow().len()
+    }
+
+    pub fn corrected(&self) -> String {
+        let mut source_index: usize = 0;
+        let mut correction_index: usize = 0;
+        let mut output = String::new();
+        let corrections = self.corrections.borrow();
+
+        let bytes = &self.parser_result.input.bytes;
+
+        while source_index < bytes.len() {
+            if let Some(correction) = corrections.get(correction_index) {
+                output.push_str(&String::from_utf8_lossy(
+                    &bytes[source_index..correction.loc.begin],
+                ));
+                output.push_str(&correction.value);
+
+                correction_index += 1;
+                source_index += correction.loc.end;
+            } else {
+                output.push_str(&String::from_utf8_lossy(&bytes[source_index..]));
+                source_index = bytes.len();
+            }
+        }
+
+        dbg!(&self.corrections);
+        output
     }
 }

@@ -14,6 +14,12 @@ pub type TokensHandler = fn(&Vec<Token>, &source::File);
 pub type NodeHandlersMap = Mutex<HashMap<&'static str, Vec<(&'static str, NodeHandler)>>>;
 pub type TargetFilesMap = HashMap<String, HashSet<&'static str>>;
 
+#[derive(Debug)]
+pub struct Correction {
+    pub loc: Loc,
+    pub value: String,
+}
+
 pub struct Offense {
     pub filepath: String,
     pub line: usize,

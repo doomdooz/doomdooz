@@ -21,6 +21,11 @@ pub fn on_and(node: &types::Node, file: &source::File) {
 
         if operator == "and" {
             file.add_offense(COP_NAME, node.operator_l, MSG_AND);
+
+            file.add_correction(types::Correction {
+                loc: node.operator_l,
+                value: "&&".to_string(),
+            });
         }
     }
 }
@@ -31,6 +36,11 @@ pub fn on_or(node: &types::Node, file: &source::File) {
 
         if operator == "or" {
             file.add_offense(COP_NAME, node.operator_l, MSG_OR);
+
+            file.add_correction(types::Correction {
+                loc: node.operator_l,
+                value: "||".to_string(),
+            });
         }
     }
 }
@@ -50,5 +60,8 @@ mod tests {
 
         crate::expect_no_offense!("true && false");
         crate::expect_no_offense!("true || false");
+
+        crate::expect_correction!("true and false", "true && false");
+        crate::expect_correction!("true or false", "true || false");
     }
 }
