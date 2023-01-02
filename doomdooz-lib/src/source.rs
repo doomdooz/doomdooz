@@ -8,7 +8,7 @@ use std::str;
 
 pub struct File<'a> {
     filepath: String,
-    offenses: types::OffenseList2,
+    offenses: types::OffenseList,
     active_cops: &'a HashSet<&'a str>,
     corrections: RefCell<Vec<types::Correction>>,
     pub parser_result: types::ParserResult,

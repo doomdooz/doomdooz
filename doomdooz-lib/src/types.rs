@@ -7,8 +7,7 @@ use std::collections::HashMap;
 use std::collections::HashSet;
 use std::sync::Mutex;
 
-pub type OffenseList = Mutex<Vec<String>>;
-pub type OffenseList2 = RefCell<Vec<Offense>>;
+pub type OffenseList = RefCell<Vec<Offense>>;
 pub type NodeHandler = fn(&Node, &source::File);
 pub type TokensHandler = fn(&Vec<Token>, &source::File);
 pub type NodeHandlersMap = Mutex<HashMap<&'static str, Vec<(&'static str, NodeHandler)>>>;
