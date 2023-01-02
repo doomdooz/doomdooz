@@ -110,6 +110,17 @@ impl<'a> File<'a> {
                     self.iterate_nodes(&body);
                 }
             }
+            types::Node::If(n) => {
+                self.iterate_nodes(&n.cond);
+
+                if let Some(body) = &n.if_true {
+                    self.iterate_nodes(&body);
+                }
+
+                if let Some(body) = &n.if_false {
+                    self.iterate_nodes(&body);
+                }
+            }
             types::Node::Send(n) => {
                 call_handlers(&("send_".to_owned() + &n.method_name));
             }
