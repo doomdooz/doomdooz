@@ -1,5 +1,4 @@
 use crate::cop;
-use crate::cop::register_node_handler;
 use crate::source;
 use crate::types;
 
@@ -7,9 +6,8 @@ static MSG: &str = "Do not use `::` for defining class methods.";
 static COP_NAME: &str = "Style/ColonMethodDefinition";
 
 pub fn init() {
-    register_node_handler("defs", COP_NAME, on_defs);
-
     cop::register(COP_NAME);
+    cop::register_node_handler("defs", COP_NAME, on_defs);
 }
 
 pub fn on_defs(node: &types::Node, file: &source::File) {

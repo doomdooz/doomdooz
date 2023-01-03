@@ -1,5 +1,4 @@
 use crate::cop;
-use crate::cop::register_node_handler;
 use crate::source;
 use crate::types;
 use std::str;
@@ -9,10 +8,9 @@ const MSG_AND: &str = "Use `&&` instead of `and`.";
 const MSG_OR: &str = "Use `||` instead of `or`.";
 
 pub fn init() {
-    register_node_handler("and", COP_NAME, on_and);
-    register_node_handler("or", COP_NAME, on_or);
-
     cop::register(COP_NAME);
+    cop::register_node_handler("and", COP_NAME, on_and);
+    cop::register_node_handler("or", COP_NAME, on_or);
 }
 
 pub fn on_and(node: &types::Node, file: &source::File) {

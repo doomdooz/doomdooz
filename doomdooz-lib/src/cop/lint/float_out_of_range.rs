@@ -7,9 +7,8 @@ static MSG: &str = "Float out of range.";
 static COP_NAME: &str = "Lint/FloatOutOfRange";
 
 pub fn init() {
-    register_node_handler("float", COP_NAME, on_float);
-
     cop::register(COP_NAME);
+    register_node_handler("float", COP_NAME, on_float);
 }
 
 pub fn on_float(node: &types::Node, file: &source::File) {

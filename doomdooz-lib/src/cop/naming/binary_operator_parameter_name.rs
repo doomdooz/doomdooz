@@ -1,4 +1,4 @@
-use crate::cop::register_node_handler;
+use crate::cop;
 use crate::source;
 use crate::types;
 
@@ -8,7 +8,8 @@ const METHODS: [&str; 9] = ["+", "-", "[]", "[]=", "<<", "===", "=~", "eql?", "e
 static COP_NAME: &str = "Naming/BinaryOperatorParameterName";
 
 pub fn init() {
-    register_node_handler("def", COP_NAME, on_def);
+    cop::register(COP_NAME);
+    cop::register_node_handler("def", COP_NAME, on_def);
 }
 
 pub fn on_def(node: &types::Node, file: &source::File) {

@@ -1,5 +1,4 @@
 use crate::cop;
-use crate::cop::register_node_handler;
 use crate::source;
 use crate::types;
 
@@ -7,9 +6,8 @@ static MSG: &str = "Use `strip` instead of `lstrip.rstrip`.";
 static COP_NAME: &str = "Style/Strip";
 
 pub fn init() {
-    register_node_handler("send", COP_NAME, on_lstrip_rstrip);
-
     cop::register(COP_NAME);
+    cop::register_node_handler("send", COP_NAME, on_lstrip_rstrip);
 }
 
 pub fn on_lstrip_rstrip(node: &types::Node, file: &source::File) {

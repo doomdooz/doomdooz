@@ -8,9 +8,8 @@ static MSG: &str = "Duplicated key in hash literal.";
 static COP_NAME: &str = "Lint/DuplicateHashKey";
 
 pub fn init() {
-    register_node_handler("hash", COP_NAME, on_hash);
-
     cop::register(COP_NAME);
+    register_node_handler("hash", COP_NAME, on_hash);
 }
 
 pub fn on_hash(node: &types::Node, file: &source::File) {

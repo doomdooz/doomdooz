@@ -17,8 +17,7 @@ pub mod types;
 
 lazy_static! {
     static ref NODE_HANDLERS: types::NodeHandlersMap = Mutex::new(HashMap::new());
-    static ref TOKENS_HANLDERS: Mutex<Vec<(&'static str, types::TokensHandler)>> =
-        Mutex::new(vec![]);
+    static ref FILE_HANLDERS: Mutex<Vec<(&'static str, types::FileHandler)>> = Mutex::new(vec![]);
     pub static ref COPS: Mutex<Vec<&'static str>> = Mutex::new(vec![]);
     pub static ref CONFIG: config::Config = config::load();
 }

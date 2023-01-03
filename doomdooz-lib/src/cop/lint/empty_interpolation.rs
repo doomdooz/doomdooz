@@ -7,9 +7,8 @@ static MSG: &str = "Empty interpolation detected.";
 static COP_NAME: &str = "Lint/EmptyInterpolation";
 
 pub fn init() {
-    register_node_handler("dstr", COP_NAME, on_dstr);
-
     cop::register(COP_NAME);
+    register_node_handler("dstr", COP_NAME, on_dstr);
 }
 
 pub fn on_dstr(node: &types::Node, file: &source::File) {

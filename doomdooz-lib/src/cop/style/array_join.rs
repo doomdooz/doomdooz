@@ -1,5 +1,4 @@
 use crate::cop;
-use crate::cop::register_node_handler;
 use crate::source;
 use crate::types;
 
@@ -7,9 +6,8 @@ static MSG: &str = "Favor `Array#join` over `Array#*`.";
 static COP_NAME: &str = "Style/ArrayJoin";
 
 pub fn init() {
-    register_node_handler("send", COP_NAME, on_def);
-
     cop::register(COP_NAME);
+    cop::register_node_handler("send", COP_NAME, on_def);
 }
 
 pub fn on_def(node: &types::Node, file: &source::File) {

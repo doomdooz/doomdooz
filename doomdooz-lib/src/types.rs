@@ -9,7 +9,7 @@ use std::sync::Mutex;
 
 pub type OffenseList = RefCell<Vec<Offense>>;
 pub type NodeHandler = fn(&Node, &source::File);
-pub type TokensHandler = fn(&Vec<Token>, &source::File);
+pub type FileHandler = fn(&source::File);
 pub type NodeHandlersMap = Mutex<HashMap<&'static str, Vec<(&'static str, NodeHandler)>>>;
 pub type TargetFilesMap = HashMap<String, HashSet<&'static str>>;
 

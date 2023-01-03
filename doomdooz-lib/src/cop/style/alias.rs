@@ -1,5 +1,4 @@
 use crate::cop;
-use crate::cop::register_node_handler;
 use crate::source;
 use crate::types;
 use crate::CONFIG;
@@ -10,9 +9,9 @@ const MSG_ALIAS: &str = "Use `alias_method` instead of `alias`.";
 const MSG_ALIAS_METHOD: &str = "Use `alias` instead of `alias_method` %<current>s.";
 
 pub fn init() {
-    register_node_handler("alias", COP_NAME, on_alias);
-    register_node_handler("send_alias_method", COP_NAME, on_alias_method);
     cop::register(COP_NAME);
+    cop::register_node_handler("alias", COP_NAME, on_alias);
+    cop::register_node_handler("send_alias_method", COP_NAME, on_alias_method);
 }
 
 pub fn on_alias(node: &types::Node, file: &source::File) {

@@ -1,6 +1,6 @@
 use crate::types;
+use crate::FILE_HANLDERS;
 use crate::NODE_HANDLERS;
-use crate::TOKENS_HANLDERS;
 use std::cell::RefCell;
 use std::collections::HashSet;
 use std::fs;
@@ -62,9 +62,9 @@ impl<'a> File<'a> {
 
         if let Some(ast) = ast {
             self.iterate_nodes(&*ast);
-            for (cop_name, handler) in TOKENS_HANLDERS.lock().unwrap().iter() {
+            for (cop_name, handler) in FILE_HANLDERS.lock().unwrap().iter() {
                 if self.is_enabled(cop_name) {
-                    handler(&self.parser_result.tokens, self);
+                    handler(self);
                 }
             }
         }

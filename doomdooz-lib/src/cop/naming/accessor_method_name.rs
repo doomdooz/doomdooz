@@ -9,8 +9,8 @@ const MSG_WRITER: &str = "Do not prefix writer method names with `set_`.";
 static COP_NAME: &str = "Naming/AccessorMethodName";
 
 pub fn init() {
-    register_node_handler("def", COP_NAME, on_def);
     cop::register(COP_NAME);
+    register_node_handler("def", COP_NAME, on_def);
 }
 
 pub fn on_def(node: &types::Node, file: &source::File) {

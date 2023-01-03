@@ -1,5 +1,4 @@
 use crate::cop;
-use crate::cop::register_node_handler;
 use crate::source;
 use crate::types;
 use regex::Regex;
@@ -9,9 +8,8 @@ static MSG: &str = "Do not use strings for word-like symbol literals.";
 static COP_NAME: &str = "Style/SymbolLiteral";
 
 pub fn init() {
-    register_node_handler("sym", COP_NAME, on_sym);
-
     cop::register(COP_NAME);
+    cop::register_node_handler("sym", COP_NAME, on_sym);
 }
 
 pub fn on_sym(node: &types::Node, file: &source::File) {

@@ -1,5 +1,4 @@
 use crate::cop;
-use crate::cop::register_tokens_handler;
 use crate::source;
 use crate::types;
 
@@ -7,12 +6,11 @@ static MSG: &str = "Put a space before an end-of-line comment.";
 static COP_NAME: &str = "Layout/SpaceBeforeComment";
 
 pub fn init() {
-    register_tokens_handler(on_tokens, COP_NAME);
-
     cop::register(COP_NAME);
+    cop::register_file_handler(on_file, COP_NAME);
 }
 
-pub fn on_tokens(_tokens: &Vec<types::Token>, file: &source::File) {
+pub fn on_file(file: &source::File) {
     for comment in &file.parser_result.comments {
         if comment.location.begin == 0 {
             continue;
