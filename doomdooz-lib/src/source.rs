@@ -123,6 +123,9 @@ impl<'a> File<'a> {
             }
             types::Node::Send(n) => {
                 call_handlers(&("send_".to_owned() + &n.method_name));
+                if let Some(n) = &n.recv {
+                    self.iterate_nodes(&n);
+                }
             }
             _ => (),
         }
