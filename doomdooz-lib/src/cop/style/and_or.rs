@@ -60,5 +60,6 @@ mod tests {
         crate::expect_no_offense!("true || false");
 
         crate::expect_correction!("true and false or false", "true && false || false");
+        crate::expect_correction!("true and false and false", "true && false && false");
     }
 }

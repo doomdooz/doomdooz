@@ -150,6 +150,14 @@ impl<'a> File<'a> {
                     self.iterate_nodes(pair);
                 }
             }
+            types::Node::Or(n) => {
+                self.iterate_nodes(&n.lhs);
+                self.iterate_nodes(&n.rhs);
+            }
+            types::Node::And(n) => {
+                self.iterate_nodes(&n.lhs);
+                self.iterate_nodes(&n.rhs);
+            }
             _ => (),
         }
     }
