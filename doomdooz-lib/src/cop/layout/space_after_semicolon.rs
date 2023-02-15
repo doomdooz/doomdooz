@@ -1,5 +1,6 @@
 use crate::cop;
 use crate::source;
+use crate::types;
 
 static MSG: &str = "Space missing after semicolon.";
 static COP_NAME: &str = "Layout/SpaceAfterSemicolon";
@@ -17,6 +18,13 @@ pub fn on_file(file: &source::File) {
             if let Some(byte) = file.parser_result.input.bytes.get(token.loc.begin + 1) {
                 if *byte != space {
                     file.add_offense(COP_NAME, token.loc, MSG);
+                    file.add_correction(types::Correction {
+                        loc: types::Loc {
+                            begin: token.loc.begin + 1,
+                            end: token.loc.begin + 1,
+                        },
+                        value: " ".to_string(),
+                    });
                 }
             }
         }
@@ -25,15 +33,20 @@ pub fn on_file(file: &source::File) {
 
 #[cfg(test)]
 mod tests {
+    use crate::*;
+
     #[test]
     fn it_works() {
-        crate::expect_offense! {"
-            x = 1;y = 2
-                 ^ Space missing after semicolon.
+        expect_offense! {"
+        x = 1;y = 2
+             ^ Space missing after semicolon.
         "};
 
-        crate::expect_no_offense!("x = 1; y = 2");
+        expect_correction!("x = 1;y = 2", "x = 1; y = 2");
+        expect_no_offense!("x = 1; y = 2");
 
-        crate::expect_no_offense!("b = 'a ;'");
+        expect_no_offense!("b = 'a ;'");
+        expect_no_offense!("x = 1;");
+        expect_no_offense!("test { ; }");
     }
 }
