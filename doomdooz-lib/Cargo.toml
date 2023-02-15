@@ -1,26 +1,26 @@
 [package]
-name = "doomdooz-lib"
 description = "Ruby linter library implementing all rubocop features"
-version = "0.1.0"
 edition = "2021"
 license = "MIT"
+name = "doomdooz-lib"
+version = "0.1.0"
 
 [lib]
 
 [dependencies]
-lib-ruby-parser="3.0.0"
-regex = "1"
-lazy_static = "1.4.0"
-yaml-rust = "0.4.5"
-merge-yaml-hash = "0.2.0"
 globwalk = "0.8.1"
 indoc = "1.0.8"
+lazy_static = "1.4.0"
+lib-ruby-parser = "4"
+merge-yaml-hash = "0.2.0"
+regex = "1"
+yaml-rust = "0.4.5"
 
 [build-dependencies]
-tera = "1"
 globwalk = "0.8.1"
+tera = "1"
 
 [profile.release]
-opt-level = 'z'
 lto = true
+opt-level = 'z'
 strip = true

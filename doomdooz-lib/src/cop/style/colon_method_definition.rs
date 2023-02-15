@@ -12,7 +12,7 @@ pub fn init() {
 
 pub fn on_defs(node: &types::Node, file: &source::File) {
     if let types::Node::Defs(node) = node {
-        if file.source(node.operator_l) == "::" {
+        if file.source(&node.operator_l) == "::" {
             file.add_offense(COP_NAME, node.operator_l, MSG)
         }
     }

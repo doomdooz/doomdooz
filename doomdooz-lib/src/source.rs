@@ -7,47 +7,36 @@ use std::fs;
 use std::str;
 
 pub struct File<'a> {
-    filepath: String,
+    pub(crate) filepath: String,
     offenses: types::OffenseList,
     active_cops: &'a HashSet<&'a str>,
     corrections: RefCell<Vec<types::Correction>>,
-    pub parser_result: types::ParserResult,
+    pub(crate) parser_result: types::ParserResult,
 }
 
 impl<'a> File<'a> {
-    pub fn inline(source: String, active_cops: &'a HashSet<&str>) -> File<'a> {
-        let options = types::ParserOptions {
-            ..Default::default()
-        };
-
-        let parser = types::Parser::new(source, options);
-
-        let parser_result = parser.do_parse();
-
-        File {
-            filepath: "".to_string(),
-            parser_result: parser_result,
-            active_cops: active_cops,
-            corrections: RefCell::new(vec![]),
-            offenses: RefCell::new(vec![]),
-        }
+    pub fn inline(source: &str, active_cops: &'a HashSet<&str>) -> File<'a> {
+        Self::build("", source, active_cops)
     }
 
-    pub fn new(filepath: String, active_cops: &'a HashSet<&str>) -> File<'a> {
+    pub fn new(filepath: &str, active_cops: &'a HashSet<&str>) -> File<'a> {
+        let source = fs::read_to_string(&filepath).unwrap();
+        Self::build(filepath, &source, active_cops)
+    }
+
+    pub(crate) fn build(filepath: &str, source: &str, active_cops: &'a HashSet<&str>) -> File<'a> {
         let options = types::ParserOptions {
             ..Default::default()
         };
-
-        let source = fs::read_to_string(&filepath).unwrap();
 
         let parser = types::Parser::new(source, options);
 
         let parser_result = parser.do_parse();
 
         File {
-            filepath: filepath,
-            parser_result: parser_result,
-            active_cops: active_cops,
+            filepath: filepath.to_owned(),
+            parser_result,
+            active_cops,
             corrections: RefCell::new(vec![]),
             offenses: RefCell::new(vec![]),
         }
@@ -127,14 +116,56 @@ impl<'a> File<'a> {
                     self.iterate_nodes(&n);
                 }
             }
+            types::Node::Def(n) => {
+                if let Some(body) = &n.body {
+                    self.iterate_nodes(&body);
+                }
+                if let Some(args) = &n.args {
+                    self.iterate_nodes(&args);
+                }
+            }
+            types::Node::Args(n) => {
+                for arg in &n.args {
+                    self.iterate_nodes(&arg);
+                }
+            }
+            types::Node::Kwargs(n) => {
+                for pair in &n.pairs {
+                    self.iterate_nodes(&pair);
+                }
+            }
+            types::Node::Hash(n) => {
+                for pair in &n.pairs {
+                    self.iterate_nodes(pair);
+                }
+            }
+            types::Node::Or(n) => {
+                self.iterate_nodes(&n.lhs);
+                self.iterate_nodes(&n.rhs);
+            }
+            types::Node::And(n) => {
+                self.iterate_nodes(&n.lhs);
+                self.iterate_nodes(&n.rhs);
+            }
             _ => (),
         }
     }
 
-    pub fn source(&self, loc: types::Loc) -> String {
-        str::from_utf8(&self.parser_result.input.bytes[loc.begin..loc.end])
-            .unwrap()
-            .to_string()
+    pub fn source(&self, loc: &types::Loc) -> &str {
+        str::from_utf8(&self.parser_result.input.bytes[loc.begin..loc.end]).unwrap()
+    }
+
+    pub fn as_bytes(&self) -> &Vec<u8> {
+        &self.parser_result.input.bytes
+    }
+
+    /// Returns (line, col) for a given position, with 1-based.
+    pub fn line_col(&self, pos: usize) -> Option<(usize, usize)> {
+        if let Some(line_col) = self.parser_result.input.line_col_for_pos(pos) {
+            return Some((line_col.0 + 1, line_col.1 + 1));
+        }
+
+        None
     }
 
     pub fn add_correction(&self, correction: types::Correction) {
@@ -199,7 +230,8 @@ impl<'a> File<'a> {
         self.offenses
             .borrow()
             .iter()
-            .for_each(|x| output.push_str(&&x.test_report()));
+            .enumerate()
+            .for_each(|(i, x)| output.push_str(&&x.test_report(i == 0)));
 
         output
     }
@@ -213,27 +245,23 @@ impl<'a> File<'a> {
     }
 
     pub fn corrected(&self) -> String {
-        let mut source_index: usize = 0;
-        let mut correction_index: usize = 0;
+        let mut offset: usize = 0;
         let mut output = String::new();
-        let corrections = self.corrections.borrow();
+        let mut corrections = self.corrections.borrow_mut();
+        corrections.sort_by(|a, b| a.loc.begin.cmp(&b.loc.begin));
 
         let bytes = &self.parser_result.input.bytes;
 
-        while source_index < bytes.len() {
-            if let Some(correction) = corrections.get(correction_index) {
-                output.push_str(&String::from_utf8_lossy(
-                    &bytes[source_index..correction.loc.begin],
-                ));
-                output.push_str(&correction.value);
+        for correction in corrections.iter() {
+            output.push_str(&String::from_utf8_lossy(
+                &bytes[offset..correction.loc.begin],
+            ));
 
-                correction_index += 1;
-                source_index += correction.loc.end;
-            } else {
-                output.push_str(&String::from_utf8_lossy(&bytes[source_index..]));
-                source_index = bytes.len();
-            }
+            output.push_str(&correction.value);
+            offset = correction.loc.end;
         }
+
+        output.push_str(&String::from_utf8_lossy(&bytes[offset..]));
 
         output
     }

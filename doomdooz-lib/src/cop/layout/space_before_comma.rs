@@ -1,7 +1,6 @@
 use crate::cop;
 use crate::source;
 
-static MSG: &str = "Space found before comma.";
 static COP_NAME: &str = "Layout/SpaceBeforeComma";
 
 pub fn init() {
@@ -10,28 +9,50 @@ pub fn init() {
 }
 
 pub fn on_file(file: &source::File) {
-    let space = " ".as_bytes()[0];
-
-    for token in &file.parser_result.tokens {
-        if token.token_name() == "tCOMMA" {
-            if let Some(byte) = file.parser_result.input.bytes.get(token.loc.begin - 1) {
-                if *byte == space {
-                    file.add_offense(COP_NAME, token.loc, MSG);
-                }
-            }
-        }
-    }
+    cop::space_before_punctuation(COP_NAME, file, "tCOMMA", "comma");
 }
 
 #[cfg(test)]
 mod tests {
+    use crate::*;
+
     #[test]
     fn it_works() {
-        crate::expect_offense! {"
-            [1 , 2]
-               ^ Space found before comma.
+        expect_offense! {"
+        each { |s , t| }
+                 ^ Space found before comma.
+        "};
+        expect_offense! {"
+        each { |s   , t| }
+                 ^^^ Space found before comma.
         "};
 
-        crate::expect_no_offense!("[1, 2]");
+        expect_correction! {"
+        each { |s , t| }
+        ", "
+        each { |s, t| }
+        "};
+
+        // registers an offense and corrects array index with space before comma
+        expect_offense! {"
+        formats[0 , 1]
+                 ^ Space found before comma.
+        "};
+        expect_correction! {"formats[0 , 1]", "formats[0, 1]"};
+
+        // registers an offense and corrects method call arg with space before comma
+        expect_offense! {"
+        a(1 , 2)
+           ^ Space found before comma.
+        "}
+        expect_correction! {"a(1 , 2)", "a(1, 2)"};
+
+        // registers an offense and corrects method call arg with space before comma
+        expect_offense! {"
+        each { |s  , t| a(1  , formats[0  , 1])}
+                 ^^ Space found before comma.
+                           ^^ Space found before comma.
+                                        ^^ Space found before comma.
+        "};
     }
 }

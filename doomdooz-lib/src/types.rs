@@ -19,6 +19,25 @@ pub struct Correction {
     pub value: String,
 }
 
+impl Correction {
+    pub(crate) fn replace(loc: Loc, new: &str) -> Self {
+        Self {
+            loc,
+            value: new.to_owned(),
+        }
+    }
+
+    /// Return a new Correction that removes the given Loc
+    pub(crate) fn remove(loc: Loc) -> Self {
+        Self::replace(loc, "")
+    }
+}
+
+/// Return a types::Loc from a given begin and end index
+pub fn loc(begin: usize, end: usize) -> Loc {
+    Loc { begin, end }
+}
+
 pub struct Offense {
     pub filepath: String,
     pub line: usize,
@@ -49,7 +68,7 @@ impl Offense {
         )
     }
 
-    pub fn test_report(&self) -> String {
+    pub fn test_report(&self, first_report: bool) -> String {
         let annotation = format!(
             "{}{} {}",
             " ".repeat(self.col_begin - 1),
@@ -57,7 +76,10 @@ impl Offense {
             self.message
         );
 
-        format!("{}\n{}", self.line_string.trim_end(), annotation)
+        match first_report {
+            true => format!("{}\n{}", self.line_string.trim_end(), annotation),
+            false => format!("\n{}", annotation),
+        }
     }
 }
 

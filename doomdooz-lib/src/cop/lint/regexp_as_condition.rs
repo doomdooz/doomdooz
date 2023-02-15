@@ -16,10 +16,11 @@ pub fn on_match_current_line(node: &types::Node, file: &source::File) {
     if let types::Node::MatchCurrentLine(node) = node {
         file.add_offense(COP_NAME, node.expression_l, MSG);
 
-        file.add_correction(types::Correction {
-            loc: node.expression_l,
-            value: file.source(node.expression_l) + " =~ $_",
-        });
+        let str = file.source(&node.expression_l);
+        file.add_correction(types::Correction::replace(
+            node.expression_l,
+            &format!("{str} =~ $_"),
+        ));
     }
 }
 
@@ -47,34 +48,24 @@ mod tests {
             end
         "};
 
-        crate::expect_correction!(
-            {
-                "
+        crate::expect_correction! {
+        "
             if /foo/
             end
+        ",
         "
-            },
-            {
-                "
             if /foo/ =~ $_
             end
-        "
-            }
-        );
+        "};
 
-        crate::expect_correction!(
-            {
-                "
+        crate::expect_correction! {
+        "
             if !/foo/
             end
+        ",
         "
-            },
-            {
-                "
             if !/foo/ =~ $_
             end
-        "
-            }
-        );
+        "};
     }
 }

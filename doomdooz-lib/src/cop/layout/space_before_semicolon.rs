@@ -1,7 +1,6 @@
 use crate::cop;
 use crate::source;
 
-static MSG: &str = "Space found before semicolon.";
 static COP_NAME: &str = "Layout/SpaceBeforeSemicolon";
 
 pub fn init() {
@@ -10,30 +9,26 @@ pub fn init() {
 }
 
 pub fn on_file(file: &source::File) {
-    let space = " ".as_bytes()[0];
-
-    for token in &file.parser_result.tokens {
-        if token.token_name() == "tSEMI" {
-            if let Some(byte) = file.parser_result.input.bytes.get(token.loc.begin - 1) {
-                if *byte == space {
-                    file.add_offense(COP_NAME, token.loc, MSG);
-                }
-            }
-        }
-    }
+    cop::space_before_punctuation(COP_NAME, file, "tSEMI", "semicolon");
 }
 
 #[cfg(test)]
 mod tests {
+    use crate::*;
+
     #[test]
     fn it_works() {
-        crate::expect_offense! {"
-            x = 1 ; y = 2
-                  ^ Space found before semicolon.
+        expect_offense! {"
+        x = 1 ; y = 2
+             ^ Space found before semicolon.
         "};
+        expect_offense! {"
+        x = 1   ; y = 2
+             ^^^ Space found before semicolon.
+        "};
+        expect_correction! {"x = 1 ; y = 2", "x = 1; y = 2"};
 
-        crate::expect_no_offense!("x = 1; y = 2");
-
-        crate::expect_no_offense!("b = 'a ;'");
+        expect_no_offense!("x = 1; y = 2");
+        expect_no_offense!("b = 'a ;'");
     }
 }

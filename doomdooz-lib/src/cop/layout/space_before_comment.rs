@@ -21,20 +21,22 @@ pub fn on_file(file: &source::File) {
             end: comment.location.begin,
         };
 
-        let chr = file.source(chr_loc);
+        let chr = file.source(&chr_loc);
 
-        if chr != " " {
-            let loc = types::Loc {
-                begin: chr_loc.begin + 1,
-                end: chr_loc.end + 1,
-            };
-            file.add_offense(COP_NAME, loc, MSG);
-
-            file.add_correction(types::Correction {
-                loc: loc,
-                value: " #".to_owned(),
-            });
+        if chr == " " || chr == "\n" {
+            continue;
         }
+
+        let loc = types::Loc {
+            begin: chr_loc.begin + 1,
+            end: chr_loc.end + 1,
+        };
+        file.add_offense(COP_NAME, loc, MSG);
+
+        file.add_correction(types::Correction {
+            loc,
+            value: " #".to_owned(),
+        });
     }
 }
 
@@ -49,6 +51,7 @@ mod tests {
 
         crate::expect_no_offense!("a += 1 # increment");
         crate::expect_no_offense!("# comment");
+        crate::expect_no_offense!("a = 1\n# comment");
         crate::expect_no_offense! {"
           =begin
           Doc comment
@@ -60,25 +63,27 @@ mod tests {
             text
           STR
         "};
+
+        crate::expect_correction!(
+            "a += 1# a comment\nb = 2# bcomment",
+            "a += 1 # a comment\nb = 2 # bcomment"
+        );
     }
 
     #[test]
     fn it_registers_an_offense_and_corrects_after_a_heredoc() {
-        crate::expect_correction!(
-            {
-                "
+        crate::expect_correction! {
+        "
           <<~STR# my string
             text
           STR
+        ",
         "
-            },
-            {
-                "
           <<~STR # my string
             text
           STR
         "
-            }
-        );
+
+        };
     }
 }
