@@ -1,6 +1,9 @@
 #[macro_export]
 macro_rules! expect_correction {
     ($source:tt, $corrected:tt) => {
+        crate::expect_correction! {"", $source, $corrected}
+    };
+    ($filepath:expr, $source:tt, $corrected:tt) => {
         crate::cop::init();
 
         let mut active_cops: std::collections::HashSet<&str> = std::collections::HashSet::new();
@@ -9,7 +12,7 @@ macro_rules! expect_correction {
         let source = indoc! {$source};
         let corrected = indoc! {$corrected};
 
-        let file = crate::source::File::inline(source, &active_cops);
+        let file = crate::source::File::build($filepath, source, &active_cops);
         file.process();
 
         assert_eq!(file.corrected(), corrected);
@@ -19,6 +22,9 @@ macro_rules! expect_correction {
 #[macro_export]
 macro_rules! expect_offense {
     ($source:expr) => {
+        crate::expect_offense! {"", $source}
+    };
+    ($filepath:expr, $source:expr) => {
         crate::cop::init();
 
         let mut active_cops: std::collections::HashSet<&str> = std::collections::HashSet::new();
@@ -38,7 +44,7 @@ macro_rules! expect_offense {
             }
         });
 
-        let file = crate::source::File::inline(&source_lines.join("\n"), &active_cops);
+        let file = crate::source::File::build($filepath, &source_lines.join("\n"), &active_cops);
 
         file.process();
 
@@ -49,6 +55,9 @@ macro_rules! expect_offense {
 #[macro_export]
 macro_rules! expect_no_offense {
     ($source:expr) => {
+        crate::expect_no_offense! {"", $source}
+    };
+    ($filepath:expr, $source:expr) => {
         crate::cop::init();
 
         let mut active_cops: std::collections::HashSet<&str> = std::collections::HashSet::new();
@@ -56,7 +65,7 @@ macro_rules! expect_no_offense {
 
         let source = indoc! {$source};
 
-        let file = crate::source::File::inline(source, &active_cops);
+        let file = crate::source::File::build($filepath, source, &active_cops);
         file.process();
 
         assert_eq!(file.total_offenses(), 0);
