@@ -131,10 +131,8 @@ impl<'a> File<'a> {
         }
     }
 
-    pub fn source(&self, loc: types::Loc) -> String {
-        str::from_utf8(&self.parser_result.input.bytes[loc.begin..loc.end])
-            .unwrap()
-            .to_string()
+    pub fn source(&self, loc: types::Loc) -> &str {
+        str::from_utf8(&self.parser_result.input.bytes[loc.begin..loc.end]).unwrap()
     }
 
     pub fn add_correction(&self, correction: types::Correction) {
