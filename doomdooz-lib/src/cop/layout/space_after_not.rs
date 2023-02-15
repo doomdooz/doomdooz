@@ -10,12 +10,10 @@ pub fn init() {
 }
 
 pub fn on_file(file: &source::File) {
-    let space = " ".as_bytes()[0];
-
     for token in &file.parser_result.tokens {
         if token.token_name() == "tBANG" {
             if let Some(byte) = file.parser_result.input.bytes.get(token.loc.begin + 1) {
-                if *byte == space {
+                if *byte == b' ' {
                     file.add_offense(COP_NAME, token.loc, MSG);
                 }
             }

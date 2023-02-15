@@ -15,7 +15,7 @@ pub fn init() {
 
 pub fn on_and(node: &types::Node, file: &source::File) {
     if let types::Node::And(node) = node {
-        let operator = file.source(node.operator_l);
+        let operator = file.source(&node.operator_l);
 
         if operator == "and" {
             file.add_offense(COP_NAME, node.operator_l, MSG_AND);
@@ -30,7 +30,7 @@ pub fn on_and(node: &types::Node, file: &source::File) {
 
 pub fn on_or(node: &types::Node, file: &source::File) {
     if let types::Node::Or(node) = node {
-        let operator = file.source(node.operator_l);
+        let operator = file.source(&node.operator_l);
 
         if operator == "or" {
             file.add_offense(COP_NAME, node.operator_l, MSG_OR);
@@ -59,7 +59,6 @@ mod tests {
         crate::expect_no_offense!("true && false");
         crate::expect_no_offense!("true || false");
 
-        crate::expect_correction!("true and false", "true && false");
-        crate::expect_correction!("true or false", "true || false");
+        crate::expect_correction!("true and false or false", "true && false || false");
     }
 }

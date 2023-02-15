@@ -127,12 +127,39 @@ impl<'a> File<'a> {
                     self.iterate_nodes(&n);
                 }
             }
+            types::Node::Def(n) => {
+                if let Some(body) = &n.body {
+                    self.iterate_nodes(&body);
+                }
+                if let Some(args) = &n.args {
+                    self.iterate_nodes(&args);
+                }
+            }
+            types::Node::Args(n) => {
+                for arg in &n.args {
+                    self.iterate_nodes(&arg);
+                }
+            }
+            types::Node::Kwargs(n) => {
+                for pair in &n.pairs {
+                    self.iterate_nodes(&pair);
+                }
+            }
+            types::Node::Hash(n) => {
+                for pair in &n.pairs {
+                    self.iterate_nodes(pair);
+                }
+            }
             _ => (),
         }
     }
 
-    pub fn source(&self, loc: types::Loc) -> &str {
+    pub fn source(&self, loc: &types::Loc) -> &str {
         str::from_utf8(&self.parser_result.input.bytes[loc.begin..loc.end]).unwrap()
+    }
+
+    pub fn as_bytes(&self) -> &Vec<u8> {
+        &self.parser_result.input.bytes
     }
 
     pub fn add_correction(&self, correction: types::Correction) {

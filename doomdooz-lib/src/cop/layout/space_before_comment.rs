@@ -21,7 +21,7 @@ pub fn on_file(file: &source::File) {
             end: comment.location.begin,
         };
 
-        let chr = file.source(chr_loc);
+        let chr = file.source(&chr_loc);
 
         if chr == " " || chr == "\n" {
             continue;
