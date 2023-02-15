@@ -24,7 +24,7 @@ impl<'a> File<'a> {
         Self::build(filepath, &source, active_cops)
     }
 
-    fn build(filepath: &str, source: &str, active_cops: &'a HashSet<&str>) -> File<'a> {
+    pub(crate) fn build(filepath: &str, source: &str, active_cops: &'a HashSet<&str>) -> File<'a> {
         let options = types::ParserOptions {
             ..Default::default()
         };
@@ -159,8 +159,13 @@ impl<'a> File<'a> {
         &self.parser_result.input.bytes
     }
 
+    /// Returns (line, col) for a given position, with 1-based.
     pub fn line_col(&self, pos: usize) -> Option<(usize, usize)> {
-        self.parser_result.input.line_col_for_pos(pos)
+        if let Some(line_col) = self.parser_result.input.line_col_for_pos(pos) {
+            return Some((line_col.0 + 1, line_col.1 + 1));
+        }
+
+        None
     }
 
     pub fn add_correction(&self, correction: types::Correction) {
