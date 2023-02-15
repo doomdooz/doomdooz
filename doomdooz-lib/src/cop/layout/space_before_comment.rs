@@ -23,18 +23,20 @@ pub fn on_file(file: &source::File) {
 
         let chr = file.source(chr_loc);
 
-        if chr != " " {
-            let loc = types::Loc {
-                begin: chr_loc.begin + 1,
-                end: chr_loc.end + 1,
-            };
-            file.add_offense(COP_NAME, loc, MSG);
-
-            file.add_correction(types::Correction {
-                loc: loc,
-                value: " #".to_owned(),
-            });
+        if chr == " " || chr == "\n" {
+            continue;
         }
+
+        let loc = types::Loc {
+            begin: chr_loc.begin + 1,
+            end: chr_loc.end + 1,
+        };
+        file.add_offense(COP_NAME, loc, MSG);
+
+        file.add_correction(types::Correction {
+            loc: loc,
+            value: " #".to_owned(),
+        });
     }
 }
 
@@ -49,6 +51,7 @@ mod tests {
 
         crate::expect_no_offense!("a += 1 # increment");
         crate::expect_no_offense!("# comment");
+        crate::expect_no_offense!("a = 1\n# comment");
         crate::expect_no_offense! {"
           =begin
           Doc comment
