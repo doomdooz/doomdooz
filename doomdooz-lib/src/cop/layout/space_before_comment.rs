@@ -72,21 +72,18 @@ mod tests {
 
     #[test]
     fn it_registers_an_offense_and_corrects_after_a_heredoc() {
-        crate::expect_correction!(
-            {
-                "
+        crate::expect_correction! {
+        "
           <<~STR# my string
             text
           STR
+        ",
         "
-            },
-            {
-                "
           <<~STR # my string
             text
           STR
         "
-            }
-        );
+
+        };
     }
 }

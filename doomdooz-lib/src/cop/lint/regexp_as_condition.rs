@@ -48,34 +48,24 @@ mod tests {
             end
         "};
 
-        crate::expect_correction!(
-            {
-                "
+        crate::expect_correction! {
+        "
             if /foo/
             end
+        ",
         "
-            },
-            {
-                "
             if /foo/ =~ $_
             end
-        "
-            }
-        );
+        "};
 
-        crate::expect_correction!(
-            {
-                "
+        crate::expect_correction! {
+        "
             if !/foo/
             end
+        ",
         "
-            },
-            {
-                "
             if !/foo/ =~ $_
             end
-        "
-            }
-        );
+        "};
     }
 }
