@@ -28,10 +28,7 @@ pub fn on_kwoptarg(node: &types::Node, file: &source::File) {
             };
 
             file.add_offense(COP_NAME, loc, MSG);
-            file.add_correction(types::Correction {
-                loc,
-                value: ": ".to_owned(),
-            });
+            file.add_correction(types::Correction::replace(loc, ": "));
         }
     }
 }

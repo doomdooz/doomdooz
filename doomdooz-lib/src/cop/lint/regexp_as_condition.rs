@@ -17,10 +17,10 @@ pub fn on_match_current_line(node: &types::Node, file: &source::File) {
         file.add_offense(COP_NAME, node.expression_l, MSG);
 
         let str = file.source(&node.expression_l);
-        file.add_correction(types::Correction {
-            loc: node.expression_l,
-            value: format!("{str} =~ $_"),
-        });
+        file.add_correction(types::Correction::replace(
+            node.expression_l,
+            &format!("{str} =~ $_"),
+        ));
     }
 }
 

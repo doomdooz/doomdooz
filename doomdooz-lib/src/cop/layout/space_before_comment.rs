@@ -34,7 +34,7 @@ pub fn on_file(file: &source::File) {
         file.add_offense(COP_NAME, loc, MSG);
 
         file.add_correction(types::Correction {
-            loc: loc,
+            loc,
             value: " #".to_owned(),
         });
     }

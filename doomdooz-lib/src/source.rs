@@ -230,7 +230,8 @@ impl<'a> File<'a> {
         self.offenses
             .borrow()
             .iter()
-            .for_each(|x| output.push_str(&&x.test_report()));
+            .enumerate()
+            .for_each(|(i, x)| output.push_str(&&x.test_report(i == 0)));
 
         output
     }

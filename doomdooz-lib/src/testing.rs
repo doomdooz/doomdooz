@@ -35,9 +35,13 @@ macro_rules! expect_offense {
         let mut source_lines: Vec<String> = vec![];
         let mut annotation_lines: Vec<String> = vec![];
 
+        let mut has_code = false;
         source.to_string().lines().for_each(|line| {
             if line.trim().starts_with("^") {
-                annotation_lines.push(source_lines.last().unwrap().to_string());
+                if !has_code {
+                    annotation_lines.push(source_lines.last().unwrap().to_string());
+                    has_code = true;
+                }
                 annotation_lines.push(line.to_string());
             } else {
                 source_lines.push(line.to_string());
@@ -48,7 +52,16 @@ macro_rules! expect_offense {
 
         file.process();
 
-        assert_eq!(file.test_report(), annotation_lines.join("\n"));
+        let actual_offenses = file.test_report();
+        let expected_offenses = annotation_lines.join("\n");
+        // println!("{}\n", actual_offenses);
+
+        assert!(
+            actual_offenses == expected_offenses,
+            "\n\n-------------- expected:\n\n{}\n\n-------------- actually:\n\n{}\n\n",
+            expected_offenses,
+            actual_offenses
+        );
     };
 }
 

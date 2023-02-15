@@ -46,10 +46,7 @@ pub fn on_file(file: &source::File) {
         let mut new_text = text.to_string();
         new_text.replace_range(postfix_offset + 1..postfix_offset + 1, " ");
 
-        let correction = types::Correction {
-            loc,
-            value: new_text,
-        };
+        let correction = types::Correction::replace(loc, &new_text);
         file.add_correction(correction);
     }
 }

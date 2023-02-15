@@ -11,20 +11,15 @@ pub fn init() {
 }
 
 pub fn on_file(file: &source::File) {
-    let space = " ".as_bytes()[0];
-
     for token in &file.parser_result.tokens {
         if token.token_name() == "tSEMI" {
-            if let Some(byte) = file.parser_result.input.bytes.get(token.loc.begin + 1) {
-                if *byte != space {
+            if let Some(b) = file.as_bytes().get(token.loc.begin + 1) {
+                if *b != b' ' {
                     file.add_offense(COP_NAME, token.loc, MSG);
-                    file.add_correction(types::Correction {
-                        loc: types::Loc {
-                            begin: token.loc.begin + 1,
-                            end: token.loc.begin + 1,
-                        },
-                        value: " ".to_string(),
-                    });
+                    file.add_correction(types::Correction::replace(
+                        types::loc(token.loc.begin + 1, token.loc.begin + 1),
+                        " ",
+                    ));
                 }
             }
         }

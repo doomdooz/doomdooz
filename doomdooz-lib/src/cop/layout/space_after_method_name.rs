@@ -23,10 +23,7 @@ pub fn on_def(node: &types::Node, file: &source::File) {
             if let Some(b) = file.as_bytes().get(loc.begin) {
                 if *b == b' ' {
                     file.add_offense(COP_NAME, loc, MSG);
-                    file.add_correction(types::Correction {
-                        loc,
-                        value: "".to_owned(),
-                    });
+                    file.add_correction(types::Correction::remove(loc));
                 }
             }
         }

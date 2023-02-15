@@ -29,13 +29,7 @@ pub fn on_file(file: &source::File) {
     }
 
     file.add_offense(COP_NAME, token.loc, MSG);
-    file.add_correction(types::Correction {
-        loc: types::Loc {
-            begin: 0,
-            end: token.loc.begin,
-        },
-        value: "".to_string(),
-    });
+    file.add_correction(types::Correction::remove(types::loc(0, token.loc.begin)));
 }
 
 #[cfg(test)]
