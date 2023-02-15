@@ -238,27 +238,23 @@ impl<'a> File<'a> {
     }
 
     pub fn corrected(&self) -> String {
-        let mut source_index: usize = 0;
-        let mut correction_index: usize = 0;
+        let mut offset: usize = 0;
         let mut output = String::new();
-        let corrections = self.corrections.borrow();
+        let mut corrections = self.corrections.borrow_mut();
+        corrections.sort_by(|a, b| a.loc.begin.cmp(&b.loc.begin));
 
         let bytes = &self.parser_result.input.bytes;
 
-        while source_index < bytes.len() {
-            if let Some(correction) = corrections.get(correction_index) {
-                output.push_str(&String::from_utf8_lossy(
-                    &bytes[source_index..correction.loc.begin],
-                ));
-                output.push_str(&correction.value);
+        for correction in corrections.iter() {
+            output.push_str(&String::from_utf8_lossy(
+                &bytes[offset..correction.loc.begin],
+            ));
 
-                correction_index += 1;
-                source_index += correction.loc.end;
-            } else {
-                output.push_str(&String::from_utf8_lossy(&bytes[source_index..]));
-                source_index = bytes.len();
-            }
+            output.push_str(&correction.value);
+            offset = correction.loc.end;
         }
+
+        output.push_str(&String::from_utf8_lossy(&bytes[offset..]));
 
         output
     }

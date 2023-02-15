@@ -63,6 +63,11 @@ mod tests {
             text
           STR
         "};
+
+        crate::expect_correction!(
+            "a += 1# a comment\nb = 2# bcomment",
+            "a += 1 # a comment\nb = 2 # bcomment"
+        );
     }
 
     #[test]
