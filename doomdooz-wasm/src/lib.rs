@@ -7,7 +7,7 @@ pub fn doomdooz(source: String) -> String {
     cop::init();
 
     let cops = HashSet::from_iter(COPS.lock().unwrap().iter().cloned());
-    let file = source::File::inline(source, &cops);
+    let file = source::File::inline(&source, &cops);
 
     file.process();
     file.report()

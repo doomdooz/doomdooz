@@ -58,7 +58,7 @@ fn run(correction: bool) {
     files
         .par_iter()
         .map(|(filepath, active_cops)| {
-            let file = source::File::new(filepath.clone(), active_cops);
+            let file = source::File::new(&filepath, active_cops);
             file.process();
             file.print_report();
 
